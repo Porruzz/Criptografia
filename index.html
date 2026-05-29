@@ -1052,14 +1052,14 @@
       trace.push({
         line: 2,
         vars: { tempA: 'sin definir', tempB: 'sin definir', q: '-', r: '-' },
-        explanation: `Iniciando función. Guardamos el valor absoluto de A: |${aOrig}| = ${a}.`
+        explanation: `🏁 <strong>¡Empezamos!</strong> Guardamos el primer número en una variable (una caja de memoria) llamada <code>tempA</code>: <strong>${a}</strong>. Si fuera negativo, le quitaríamos el signo menos.`
       });
       
       let tempA = a;
       trace.push({
         line: 3,
         vars: { tempA: tempA, tempB: 'sin definir', q: '-', r: '-' },
-        explanation: `Guardamos el valor absoluto de B: |${bOrig}| = ${b}.`
+        explanation: `🏁 Guardamos el segundo número en otra variable llamada <code>tempB</code>: <strong>${b}</strong> (también asegurándolo positivo).`
       });
       
       let tempB = b;
@@ -1070,56 +1070,56 @@
         trace.push({
           line: 4,
           vars: { tempA, tempB, q, r },
-          explanation: `Evaluando condición: ¿tempB (${tempB}) > 0? Falso. El ciclo while no se ejecuta.`
+          explanation: `🔄 <strong>Pregunta:</strong> ¿El segundo número (<code>tempB</code> = ${tempB}) es mayor que cero? No. Como es cero, no podemos dividir por él y el ciclo termina inmediatamente.`
         });
       } else {
         while (tempB > 0) {
           trace.push({
             line: 4,
             vars: { tempA, tempB, q, r },
-            explanation: `Evaluando condición: ¿tempB (${tempB}) > 0? Verdadero. Entramos al ciclo while.`
+            explanation: `🔄 <strong>Pregunta:</strong> ¿El segundo número (<code>tempB</code> = ${tempB}) es mayor que cero? <strong>Sí</strong>. Esto significa que podemos seguir dividiendo para encontrar el divisor común.`
           });
           
           q = Math.floor(tempA / tempB);
           trace.push({
             line: 5,
             vars: { tempA, tempB, q, r },
-            explanation: `Calculamos el cociente entero q = Math.floor(${tempA} / ${tempB}) = ${q}.`
+            explanation: `🧠 <strong>Dividimos:</strong> Calculamos cuántas veces cabe de forma exacta ${tempB} dentro de ${tempA}. Vemos que cabe <strong>${q}</strong> veces exactas. A este resultado lo llamamos cociente (<code>q</code>).`
           });
           
           r = tempA % tempB;
           trace.push({
             line: 6,
             vars: { tempA, tempB, q, r },
-            explanation: `Calculamos el resto/residuo r = ${tempA} % ${tempB} = ${r}.`
+            explanation: `🎈 <strong>Sobrante:</strong> Calculamos lo que sobra (el residuo <code>r</code>) tras hacer la división anterior. De dividir ${tempA} entre ${tempB}, nos sobran <strong>${r}</strong>.`
           });
           
           tempA = tempB;
           trace.push({
             line: 7,
             vars: { tempA, tempB, q, r },
-            explanation: `Actualizamos tempA: toma el valor del divisor anterior tempB (${tempB}).`
+            explanation: `🔄 <strong>Intercambio:</strong> Pasamos el número divisor <code>tempB</code> (${tempB}) a la caja <code>tempA</code>. Ahora será el nuevo dividendo.`
           });
           
           tempB = r;
           trace.push({
             line: 8,
             vars: { tempA, tempB, q, r },
-            explanation: `Actualizamos tempB: toma el valor del residuo r (${r}).`
+            explanation: `🔄 El residuo que nos sobró (<code>r</code> = ${r}) lo pasamos a la caja <code>tempB</code>. Será el nuevo divisor para el próximo paso.`
           });
         }
         
         trace.push({
           line: 4,
           vars: { tempA, tempB, q, r },
-          explanation: `Evaluando condición: ¿tempB (${tempB}) > 0? Falso. Rompemos el ciclo while.`
+          explanation: `🔄 <strong>Pregunta:</strong> ¿El divisor actual (<code>tempB</code> = ${tempB}) es mayor que cero? No (ya es 0). Por lo tanto, detenemos las divisiones.`
         });
       }
       
       trace.push({
         line: 10,
         vars: { tempA, tempB, q, r },
-        explanation: `Fin del algoritmo. Retornamos tempA = ${tempA} como el MCD de los números.`
+        explanation: `🏆 <strong>¡Meta alcanzada!</strong> El último número que dividió con éxito (lo que quedó en <code>tempA</code>) es <strong>${tempA}</strong>. ¡Ese es el Máximo Común Divisor (MCD)!`
       });
       
       return trace;
@@ -1133,7 +1133,7 @@
       trace.push({
         line: 2,
         vars: { r: `[${A}, ${B}]`, x: 'sin definir', y: 'sin definir', i: 'sin definir', q: '-' },
-        explanation: `Inicializamos el arreglo de residuos r con los valores absolutos de A y B: r = [${A}, ${B}].`
+        explanation: `📋 <strong>Inicio de Residuos:</strong> Creamos una lista llamada <code>r</code> para ir anotando los sobrantes de cada división. Empezamos anotando los números iniciales en positivo: <strong>[${A}, ${B}]</strong>.`
       });
       
       let r_arr = [A, B];
@@ -1143,14 +1143,14 @@
       trace.push({
         line: 3,
         vars: { r: `[${r_arr.join(', ')}]`, x: '[1, 0]', y: '[0, 1]', i: 'sin definir', q: '-' },
-        explanation: `Inicializamos los arreglos de coeficientes de Bézout: x = [1, 0] e y = [0, 1].`
+        explanation: `📋 <strong>Inicio de Coeficientes:</strong> Preparamos dos listas auxiliares, <code>x</code> y <code>y</code>, que nos servirán para rastrear cómo combinar A y B. Las inicializamos en: x = <strong>[1, 0]</strong> e y = <strong>[0, 1]</strong>.`
       });
       
       let i = 1;
       trace.push({
         line: 4,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q: '-' },
-        explanation: `Definimos el índice del divisor actual i = 1.`
+        explanation: `📍 <strong>Apuntador:</strong> Creamos un índice <code>i = 1</code> para saber en qué posición de nuestras listas de trabajo estamos situados.`
       });
       
       let q = '-';
@@ -1159,21 +1159,21 @@
         trace.push({
           line: 5,
           vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-          explanation: `Evaluando condición: ¿r[i] (r[1] = ${r_arr[i]}) !== 0? Falso. El ciclo no se ejecuta.`
+          explanation: `🔄 <strong>Pregunta:</strong> ¿El residuo actual en la posición <code>i=1</code> (r[1] = ${r_arr[i]}) es distinto de cero? No, es cero. El ciclo no se ejecuta.`
         });
       } else {
         while (r_arr[i] !== 0) {
           trace.push({
             line: 5,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Evaluando condición: ¿r[${i}] (${r_arr[i]}) !== 0? Verdadero. Continuamos dividiendo.`
+            explanation: `🔄 <strong>Pregunta:</strong> ¿El residuo actual en la posición <code>i=${i}</code> (r[${i}] = ${r_arr[i]}) es distinto de cero? <strong>Sí</strong>. Significa que debemos seguir dividiendo y calculando.`
           });
           
           q = Math.floor(r_arr[i-1] / r_arr[i]);
           trace.push({
             line: 6,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Calculamos el cociente entero entre residuos: q = Math.floor(r[${i-1}] / r[${i}]) = floor(${r_arr[i-1]} / ${r_arr[i]}) = ${q}.`
+            explanation: `🧠 <strong>Dividimos:</strong> Vemos cuántas veces cabe de forma entera el residuo anterior (${r_arr[i-1]}) en el actual (${r_arr[i]}). Cabe <strong>${q}</strong> veces exactas.`
           });
           
           let nextR = r_arr[i-1] % r_arr[i];
@@ -1181,7 +1181,7 @@
           trace.push({
             line: 7,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Obtenemos el nuevo residuo: r[${i+1}] = r[${i-1}] % r[${i}] = ${nextR}.`
+            explanation: `✏️ <strong>Sobrante:</strong> Obtenemos el nuevo residuo al dividir ${r_arr[i-1]} entre ${r_arr[i]}, que es <strong>${nextR}</strong>, y lo agregamos a la lista <code>r</code>.`
           });
           
           let nextX = x_arr[i-1] - q * x_arr[i];
@@ -1189,7 +1189,7 @@
           trace.push({
             line: 8,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Calculamos el nuevo coeficiente x: x.push(x[${i-1}] - q · x[${i}]) = ${x_arr[i-1]} - ${q} · ${x_arr[i]} = ${nextX}.`
+            explanation: `🧮 <strong>Fórmula para x:</strong> Calculamos el siguiente valor para la lista <code>x</code> combinando los anteriores: restamos el valor de hace dos pasos (${x_arr[i-1]}) menos el cociente (${q}) multiplicado por el anterior (${x_arr[i]}). Agregamos <strong>${nextX}</strong> a la lista <code>x</code>.`
           });
           
           let nextY = y_arr[i-1] - q * y_arr[i];
@@ -1197,21 +1197,21 @@
           trace.push({
             line: 9,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Calculamos el nuevo coeficiente y: y.push(y[${i-1}] - q · y[${i}]) = ${y_arr[i-1]} - ${q} · ${y_arr[i]} = ${nextY}.`
+            explanation: `🧮 <strong>Fórmula para y:</strong> Hacemos exactamente lo mismo para la lista <code>y</code>. Restamos el valor de hace dos pasos (${y_arr[i-1]}) menos el cociente (${q}) multiplicado por el anterior (${y_arr[i]}). Agregamos <strong>${nextY}</strong> a la lista <code>y</code>.`
           });
           
           i++;
           trace.push({
             line: 10,
             vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-            explanation: `Incrementamos el índice de la iteración: i = ${i}.`
+            explanation: `📍 <strong>Avanzamos:</strong> Incrementamos el apuntador de la iteración <code>i</code> a <strong>${i}</strong> para pasar al siguiente elemento en las listas.`
           });
         }
         
         trace.push({
           line: 5,
           vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-          explanation: `Evaluando condición: ¿r[${i}] (${r_arr[i]}) !== 0? Falso. Rompemos el ciclo.`
+          explanation: `🔄 <strong>Pregunta:</strong> ¿El residuo actual en la posición r[${i}] (${r_arr[i]}) es distinto de cero? No, es cero. Por lo tanto, rompemos el ciclo.`
         });
       }
       
@@ -1221,20 +1221,20 @@
       trace.push({
         line: 12,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: 'sin definir' },
-        explanation: `Ajustamos el coeficiente x final según el signo del número A original: xFinal = ${xFinal}.`
+        explanation: `⚖️ <strong>Ajuste de Signo A:</strong> Si el número original A que ingresaste era negativo, le cambiamos el signo al coeficiente final de la lista <code>x</code>. Nos queda: <strong>${xFinal}</strong>.`
       });
       
       let yFinal = bOrig < 0 ? -yAbsFinal : yAbsFinal;
       trace.push({
         line: 13,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: yFinal },
-        explanation: `Ajustamos el coeficiente y final según el signo del número B original: yFinal = ${yFinal}.`
+        explanation: `⚖️ <strong>Ajuste de Signo B:</strong> Hacemos lo mismo para el coeficiente de la lista <code>y</code>. Si B era negativo, invertimos su signo. Nos queda: <strong>${yFinal}</strong>.`
       });
       
       trace.push({
         line: 14,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: yFinal },
-        explanation: `Retornamos el MCD obtenido (r[${i-1}] = ${r_arr[i-1]}) y los coeficientes de Bézout finales: x = ${xFinal}, y = ${yFinal}.`
+        explanation: `🏆 <strong>¡Resultado de Bézout!</strong> Retornamos el MCD (<strong>${r_arr[i-1]}</strong>) y los coeficientes finales: <strong>x = ${xFinal}</strong> y <strong>y = ${yFinal}</strong>. Esto nos demuestra matemáticamente que: A·x + B·y = MCD.`
       });
       
       return trace;
@@ -1730,14 +1730,14 @@
       trace.push({
         line: 1,
         vars: { base: baseOrig, exp: expOrig, mod: modOrig, res: 'sin definir', expMod2: '-' },
-        explanation: `Iniciando exponenciación modular para calcular: <strong>${baseOrig}<sup>${expOrig}</sup> mod ${modOrig}</strong>.`
+        explanation: `🚀 <strong>¡Empezamos el viaje!</strong> Queremos calcular el resultado de elevar <strong>${baseOrig}</strong> a la potencia <strong>${expOrig}</strong>, y quedarnos con lo que sobra al dividirlo por <strong>${modOrig}</strong>. ¡A mano tardaríamos muchísimo, pero usaremos un truco de velocidad de las computadoras!`
       });
       
       let res = 1;
       trace.push({
         line: 2,
         vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-        explanation: `Inicializamos el resultado acumulado: <strong>res = 1</strong>.`
+        explanation: `📦 <strong>Caja de Resultado:</strong> Creamos una caja llamada <code>res</code> (resultado) y guardamos inicialmente un <strong>1</strong>. Aquí es donde acumularemos el resultado final.`
       });
       
       let baseMod = base % mod;
@@ -1745,14 +1745,14 @@
       trace.push({
         line: 3,
         vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-        explanation: `Aseguramos que la base sea menor al módulo: base = ${baseOrig} % ${mod} = <strong>${base}</strong>.`
+        explanation: `⚖️ <strong>Achicar la Base:</strong> Para no trabajar con números gigantes, si la base es mayor que el módulo (${mod}), la reducimos dividiéndola por él y nos quedamos con lo que sobra. Como ${baseOrig} % ${mod} = ${base}, la base se convierte en <strong>${base}</strong>.`
       });
       
       while (exp > 0) {
         trace.push({
           line: 4,
           vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-          explanation: `Evaluando condición: ¿exp (${exp}) &gt; 0? Sí, el ciclo continúa.`
+          explanation: `🔄 <strong>Pregunta de Control:</strong> ¿Aún nos queda exponente por procesar (es decir, <code>exp</code> (${exp}) es mayor que 0)? <strong>Sí</strong>. Entonces continuamos con las operaciones.`
         });
         
         let isOdd = (exp % 2 === 1);
@@ -1760,7 +1760,7 @@
         trace.push({
           line: 5,
           vars: { base: base, exp: exp, mod: mod, res: res, expMod2: expMod2 },
-          explanation: `Evaluando bit: exp % 2 = ${exp} % 2 = <strong>${expMod2}</strong> (¿exponente impar? <strong>${isOdd ? 'Sí' : 'No'}</strong>).`
+          explanation: `🔍 <strong>¿Es Impar?</strong> Revisamos si el exponente actual (${exp}) es un número impar. Calculamos exp % 2 = <strong>${expMod2}</strong>. ¿Es impar? <strong>${isOdd ? 'Sí' : 'No'}</strong>. Esto le dice a la computadora si debe hacer una multiplicación en el siguiente paso.`
         });
         
         if (isOdd) {
@@ -1769,7 +1769,7 @@
           trace.push({
             line: 6,
             vars: { base: base, exp: exp, mod: mod, res: res, expMod2: expMod2 },
-            explanation: `Como el bit es 1 (impar), multiplicamos: res = (${prevRes} * ${base}) % ${mod} = <strong>${res}</strong>.`
+            explanation: `➕ <strong>Multiplicamos en la caja:</strong> Como el exponente era impar, tomamos lo que había en nuestra caja <code>res</code> (${prevRes}), lo multiplicamos por la base actual (${base}) y dividimos por ${mod} para quedarnos con el residuo. La caja ahora vale <strong>${res}</strong>.`
           });
         }
         
@@ -1778,7 +1778,7 @@
         trace.push({
           line: 8,
           vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-          explanation: `Elevamos la base al cuadrado: base = (${prevBase} * ${prevBase}) % ${mod} = <strong>${base}</strong>.`
+          explanation: `⚡ <strong>El truco de velocidad:</strong> En lugar de multiplicar la base de una en una, la elevamos al cuadrado (${prevBase} × ${prevBase} = ${prevBase*prevBase}) y sacamos el residuo con ${mod}. La base pasa a valer <strong>${base}</strong>. ¡Esto ahorra miles de operaciones!`
         });
         
         let prevExp = exp;
@@ -1786,20 +1786,20 @@
         trace.push({
           line: 9,
           vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-          explanation: `Dividimos el exponente por 2: exp = floor(${prevExp} / 2) = <strong>${exp}</strong>.`
+          explanation: `✂️ <strong>Exponente a la mitad:</strong> Reducimos el exponente dividiéndolo por 2 de forma entera: floor(${prevExp} / 2) = <strong>${exp}</strong>. Esto le permite a la computadora avanzar a pasos de gigante.`
         });
       }
       
       trace.push({
         line: 4,
         vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-        explanation: `Evaluando condición: ¿exp (${exp}) &gt; 0? No (es 0). Terminamos el ciclo while.`
+        explanation: `🔄 <strong>Pregunta de Control:</strong> ¿El exponente actual es mayor que 0? No, ya vale 0. Hemos terminado de procesar todas las mitades, por lo que salimos del ciclo.`
       });
       
       trace.push({
         line: 11,
         vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
-        explanation: `Retornamos el resultado acumulado final: <strong>res = ${res}</strong>.`
+        explanation: `🏆 <strong>¡Completado con éxito!</strong> El valor final guardado en nuestra caja de resultados es <strong>${res}</strong>. Ese es el resultado de nuestra exponenciación modular rápida.`
       });
       
       return trace;
