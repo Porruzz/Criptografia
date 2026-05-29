@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visualizador Interactivo del Algoritmo de Euclides</title>
+  <title>Visualizador Interactivo de Euclides y Criptografía RSA</title>
   
   <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -112,326 +112,625 @@
     <!-- Tarjeta Principal (Card) Glassmorphism -->
     <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 shadow-xl rounded-3xl p-6 md:p-8 transition-all duration-300">
       
-      <!-- Título de la tarjeta e introducción -->
-      <div class="text-center mb-8">
-        <span class="px-3 py-1 text-xs font-semibold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full border border-violet-200/30">
-          Aritmética Modular Paso a Paso
-        </span>
-        <h2 class="text-2xl md:text-3xl font-extrabold mt-3 text-slate-900 dark:text-white">
-          Visualizador del Algoritmo de Euclides
-        </h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
-          Calcula el Máximo Común Divisor (MCD) y desvela los coeficientes de la Identidad de Bézout de forma totalmente interactiva.
-        </p>
-      </div>
-
-      <!-- Inputs y Controles -->
-      <form id="calculator-form" class="space-y-6" onsubmit="event.preventDefault();">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Campo A -->
-          <div class="relative group">
-            <label for="input-a" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              Número A
-            </label>
-            <input 
-              type="number" 
-              id="input-a" 
-              placeholder="Ej. 120"
-              class="w-full bg-slate-50/50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 px-5 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-transparent focus:bg-white dark:focus:bg-slate-950 transition-all duration-200 shadow-sm"
-              required
-            >
-            <div id="error-a" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
-              </svg>
-              <span>El campo no puede estar vacío.</span>
-            </div>
-          </div>
-
-          <!-- Campo B -->
-          <div class="relative group">
-            <label for="input-b" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-              Número B
-            </label>
-            <input 
-              type="number" 
-              id="input-b" 
-              placeholder="Ej. 23"
-              class="w-full bg-slate-50/50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 px-5 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-transparent focus:bg-white dark:focus:bg-slate-950 transition-all duration-200 shadow-sm"
-              required
-            >
-            <div id="error-b" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
-              </svg>
-              <span>El campo no puede estar vacío.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Presets / Ejemplos Rápidos -->
-        <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
-          <span class="text-slate-500 dark:text-slate-400 font-medium">Ejemplos rápidos:</span>
-          <button type="button" onclick="loadExample(270, 192)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
-            MCD Clásico (270 y 192)
-          </button>
-          <button type="button" onclick="loadExample(120, 23)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
-            Coprimo RSA (120 y 23)
-          </button>
-          <button type="button" onclick="loadExample(2345, 1435)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
-            Valores Grandes (2345 y 1435)
-          </button>
-        </div>
-
-        <!-- Botón de Envío -->
-        <button 
-          type="button" 
-          id="btn-calculate"
-          class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 dark:from-violet-500 dark:to-indigo-500 dark:hover:from-violet-400 dark:hover:to-indigo-400 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-violet-500/25 hover:shadow-violet-500/35 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex justify-center items-center gap-2.5 text-base md:text-lg focus:outline-none focus:ring-4 focus:ring-violet-500/30"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5 md:w-6 md:h-6 animate-bounce">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-3-3V18m-3-3V18m3-9h.008v.008H12V9Zm3 0h.008v.008H15V9Zm-6 0h.008v.008H9V9Zm6 3h.008v.008H15V12Zm-3 0h.008v.008H12V12Zm-3 0h.008v.008H9V12Zm-6 7.5h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm0 3.75h.008v.008h-.008V12Z" />
+      <!-- PESTAÑAS DE NAVEGACIÓN -->
+      <div class="flex border-b border-slate-200/50 dark:border-slate-800/50 mb-8 font-semibold text-sm">
+        <button id="tab-euclides" class="flex-1 pb-4 border-b-2 border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400 transition-all flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
           </svg>
-          Calcular MCD y Pasos
+          📐 Euclides & Bézout
         </button>
-      </form>
-
-      <!-- Alertas o Mensajes Especiales (ej. Números Negativos) -->
-      <div id="info-notice" class="mt-4 p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 dark:border-indigo-800/40 rounded-xl text-xs text-indigo-700 dark:text-indigo-300 hidden items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 shrink-0">
-          <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.25v2.75a.75.75 0 0 0 1.5 0v-3.5A.75.75 0 0 0 10 9H9Z" clip-rule="evenodd" />
-        </svg>
-        <span id="info-notice-text">Se calculará con los valores absolutos.</span>
+        <button id="tab-cripto" class="flex-1 pb-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-250 border-b-2 border-transparent transition-all flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+          </svg>
+          🔒 Criptografía RSA
+        </button>
       </div>
 
-      <!-- SECCIÓN DE RESULTADOS (Inicialmente Oculta) -->
-      <div id="results-section" class="mt-8 pt-8 border-t border-slate-200/50 dark:border-slate-800/50 space-y-8 hidden">
-        
-        <!-- Tarjeta del MCD Encontrado -->
-        <div class="p-5 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/15 dark:to-teal-500/15 border border-emerald-500/30 dark:border-emerald-500/40 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <div class="p-3 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-500/25">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            </div>
-            <div>
-              <h3 class="text-sm font-semibold text-emerald-800 dark:text-emerald-300">¡Cálculo Finalizado!</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">El Máximo Común Divisor ha sido determinado con éxito.</p>
-            </div>
-          </div>
-          <div class="text-left md:text-right font-extrabold text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400">
-            MCD(<span id="res-a">120</span>, <span id="res-b">23</span>) = <span id="res-gcd">1</span>
-          </div>
+      <!-- CONTENIDO PESTAÑA 1: ALGORITMO DE EUCLIDES -->
+      <div id="tab-content-euclides" class="space-y-6">
+        <!-- Título de la tarjeta e introducción -->
+        <div class="text-center mb-8">
+          <span class="px-3 py-1 text-xs font-semibold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full border border-violet-200/30">
+            Aritmética Modular Paso a Paso
+          </span>
+          <h2 class="text-2xl md:text-3xl font-extrabold mt-3 text-slate-900 dark:text-white">
+            Visualizador del Algoritmo de Euclides
+          </h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
+            Calcula el Máximo Común Divisor (MCD) y desvela los coeficientes de la Identidad de Bézout de forma totalmente interactiva.
+          </p>
         </div>
 
-        <!-- Tabla Clásica del Algoritmo -->
-        <div class="space-y-3">
-          <div class="flex justify-between items-center">
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <span class="flex h-2.5 w-2.5 rounded-full bg-violet-600 dark:bg-violet-400"></span>
-              Algoritmo de Euclides Clásico
-            </h3>
-            <span class="text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
-              Divisiones Sucesivas
-            </span>
-          </div>
-          
-          <div class="overflow-x-auto custom-scrollbar border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-100/80 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200/60 dark:border-slate-800/60">
-                  <th class="py-4 px-4 text-center">Paso</th>
-                  <th class="py-4 px-4">Dividendo (A)</th>
-                  <th class="py-4 px-4">Divisor (B)</th>
-                  <th class="py-4 px-4 text-center">Cociente (Q)</th>
-                  <th class="py-4 px-4 text-center">Resto (R)</th>
-                  <th class="py-4 px-4 font-semibold text-center">Ecuación (A = B · Q + R)</th>
-                </tr>
-              </thead>
-              <tbody id="table-classic-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-sm">
-                <!-- Se rellena con JS -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <!-- Inputs y Controles -->
+        <form id="calculator-form" class="space-y-6" onsubmit="event.preventDefault();">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Campo A -->
+            <div class="relative group">
+              <label for="input-a" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Número A
+              </label>
+              <input 
+                type="number" 
+                id="input-a" 
+                placeholder="Ej. 120"
+                class="w-full bg-slate-50/50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 px-5 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-transparent focus:bg-white dark:focus:bg-slate-950 transition-all duration-200 shadow-sm"
+                required
+              >
+              <div id="error-a" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                </svg>
+                <span>El campo no puede estar vacío.</span>
+              </div>
+            </div>
 
-        <!-- SECCIÓN ACORDEÓN: Euclides Extendido (Bézout) -->
-        <div class="border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm overflow-hidden transition-all duration-300">
+            <!-- Campo B -->
+            <div class="relative group">
+              <label for="input-b" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                Número B
+              </label>
+              <input 
+                type="number" 
+                id="input-b" 
+                placeholder="Ej. 23"
+                class="w-full bg-slate-50/50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 px-5 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-transparent focus:bg-white dark:focus:bg-slate-950 transition-all duration-200 shadow-sm"
+                required
+              >
+              <div id="error-b" class="text-xs text-rose-500 mt-1.5 hidden flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd" />
+                </svg>
+                <span>El campo no puede estar vacío.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Presets / Ejemplos Rápidos -->
+          <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+            <span class="text-slate-500 dark:text-slate-400 font-medium">Ejemplos rápidos:</span>
+            <button type="button" onclick="loadExample(270, 192)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
+              MCD Clásico (270 y 192)
+            </button>
+            <button type="button" onclick="loadExample(120, 23)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
+              Coprimo RSA (120 y 23)
+            </button>
+            <button type="button" onclick="loadExample(2345, 1435)" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium border border-slate-200/40 dark:border-slate-700/40 transition-colors">
+              Valores Grandes (2345 y 1435)
+            </button>
+          </div>
+
+          <!-- Botón de Envío -->
           <button 
             type="button" 
-            id="btn-accordion"
-            class="w-full py-5 px-6 flex items-center justify-between text-left focus:outline-none hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all duration-200"
+            id="btn-calculate"
+            class="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 dark:from-violet-500 dark:to-indigo-500 dark:hover:from-violet-400 dark:hover:to-indigo-400 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-violet-500/25 hover:shadow-violet-500/35 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex justify-center items-center gap-2.5 text-base md:text-lg focus:outline-none focus:ring-4 focus:ring-violet-500/30"
           >
-            <div class="flex items-center gap-3">
-              <div class="p-2 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-lg">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5 md:w-6 md:h-6 animate-bounce">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75V18m-3-3V18m-3-3V18m3-9h.008v.008H12V9Zm3 0h.008v.008H15V9Zm-6 0h.008v.008H9V9Zm6 3h.008v.008H15V12Zm-3 0h.008v.008H12V12Zm-3 0h.008v.008H9V12Zm-6 7.5h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm0 3.75h.008v.008h-.008V12Z" />
+            </svg>
+            Calcular MCD y Pasos
+          </button>
+        </form>
+
+        <!-- Alertas o Mensajes Especiales (ej. Números Negativos) -->
+        <div id="info-notice" class="mt-4 p-3 bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-200/40 dark:border-indigo-800/40 rounded-xl text-xs text-indigo-700 dark:text-indigo-300 hidden items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 shrink-0">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.25v2.75a.75.75 0 0 0 1.5 0v-3.5A.75.75 0 0 0 10 9H9Z" clip-rule="evenodd" />
+          </svg>
+          <span id="info-notice-text">Se calculará con los valores absolutos.</span>
+        </div>
+
+        <!-- SECCIÓN DE RESULTADOS -->
+        <div id="results-section" class="mt-8 pt-8 border-t border-slate-200/50 dark:border-slate-800/50 space-y-8 hidden">
+          
+          <!-- Tarjeta del MCD Encontrado -->
+          <div class="p-5 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 dark:from-emerald-500/15 dark:to-teal-500/15 border border-emerald-500/30 dark:border-emerald-500/40 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="p-3 bg-emerald-500 text-white rounded-xl shadow-lg shadow-emerald-500/25">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
               <div>
-                <h3 class="text-base md:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  Bonus Nivel Dios: Euclides Extendido
-                </h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Cálculo de los coeficientes de la Identidad de Bézout</p>
+                <h3 class="text-sm font-semibold text-emerald-800 dark:text-emerald-300">¡Cálculo Finalizado!</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">El Máximo Común Divisor ha sido determinado con éxito.</p>
               </div>
             </div>
-            <!-- Icono Flecha Giratoria -->
-            <svg id="accordion-icon" class="w-5 h-5 text-slate-500 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-            </svg>
-          </button>
-          
-          <!-- Contenido del Acordeón -->
-          <div id="accordion-content" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-            <div class="p-6 border-t border-slate-200/60 dark:border-slate-800/60 space-y-6">
-              
-              <!-- Ecuación de Bézout Destacada -->
-              <div class="text-center p-5 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
-                <h4 class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest mb-2">Identidad de Bézout Encontrada</h4>
-                <div class="text-lg md:text-2xl font-black text-slate-900 dark:text-white inline-block">
-                  <span id="bezout-a">A</span> · (<span id="bezout-x" class="text-violet-600 dark:text-violet-400 font-extrabold">x</span>) + 
-                  <span id="bezout-b">B</span> · (<span id="bezout-y" class="text-indigo-600 dark:text-indigo-400 font-extrabold">y</span>) = 
-                  <span id="bezout-gcd" class="text-emerald-600 dark:text-emerald-400 font-extrabold">MCD</span>
+            <div class="text-left md:text-right font-extrabold text-2xl md:text-3xl text-emerald-600 dark:text-emerald-400">
+              MCD(<span id="res-a">120</span>, <span id="res-b">23</span>) = <span id="res-gcd">1</span>
+            </div>
+          </div>
+
+          <!-- Tabla Clásica del Algoritmo -->
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <span class="flex h-2.5 w-2.5 rounded-full bg-violet-600 dark:bg-violet-400"></span>
+                Algoritmo de Euclides Clásico
+              </h3>
+              <span class="text-xs font-semibold text-slate-500 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                Divisiones Sucesivas
+              </span>
+            </div>
+            
+            <div class="overflow-x-auto custom-scrollbar border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-slate-100/80 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider border-b border-slate-200/60 dark:border-slate-800/60">
+                    <th class="py-4 px-4 text-center">Paso</th>
+                    <th class="py-4 px-4">Dividendo (A)</th>
+                    <th class="py-4 px-4">Divisor (B)</th>
+                    <th class="py-4 px-4 text-center">Cociente (Q)</th>
+                    <th class="py-4 px-4 text-center">Resto (R)</th>
+                    <th class="py-4 px-4 font-semibold text-center">Ecuación (A = B · Q + R)</th>
+                  </tr>
+                </thead>
+                <tbody id="table-classic-body" class="divide-y divide-slate-100 dark:divide-slate-800/50 text-sm">
+                  <!-- Rellenado por JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SECCIÓN ACORDEÓN: Euclides Extendido (Bézout) -->
+          <div class="border border-slate-200/60 dark:border-slate-800/60 rounded-2xl bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm overflow-hidden transition-all duration-300">
+            <button 
+              type="button" 
+              id="btn-accordion"
+              class="w-full py-5 px-6 flex items-center justify-between text-left focus:outline-none hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-all duration-200"
+            >
+              <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
                 </div>
-                <p class="text-[11px] text-slate-400 mt-2">
-                  Donde los coeficientes son <span class="font-bold text-slate-600 dark:text-slate-300">x = <span id="val-x">?</span></span> y 
-                  <span class="font-bold text-slate-600 dark:text-slate-300">y = <span id="val-y">?</span></span>.
-                </p>
+                <div>
+                  <h3 class="text-base md:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    Bonus Nivel Dios: Euclides Extendido
+                  </h3>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Cálculo de los coeficientes de la Identidad de Bézout</p>
+                </div>
+              </div>
+              <!-- Icono Flecha Giratoria -->
+              <svg id="accordion-icon" class="w-5 h-5 text-slate-500 transform transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+            
+            <!-- Contenido del Acordeón -->
+            <div id="accordion-content" class="max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="p-6 border-t border-slate-200/60 dark:border-slate-800/60 space-y-6">
+                
+                <!-- Ecuación de Bézout Destacada -->
+                <div class="text-center p-5 bg-indigo-500/5 dark:bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
+                  <h4 class="text-xs font-semibold text-indigo-700 dark:text-indigo-300 uppercase tracking-widest mb-2">Identidad de Bézout Encontrada</h4>
+                  <div class="text-lg md:text-2xl font-black text-slate-900 dark:text-white inline-block">
+                    <span id="bezout-a">A</span> · (<span id="bezout-x" class="text-violet-600 dark:text-violet-400 font-extrabold">x</span>) + 
+                    <span id="bezout-b">B</span> · (<span id="bezout-y" class="text-indigo-600 dark:text-indigo-400 font-extrabold">y</span>) = 
+                    <span id="bezout-gcd" class="text-emerald-600 dark:text-emerald-400 font-extrabold">MCD</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400 mt-2">
+                    Donde los coeficientes son <span class="font-bold text-slate-600 dark:text-slate-300">x = <span id="val-x">?</span></span> y 
+                    <span class="font-bold text-slate-600 dark:text-slate-300">y = <span id="val-y">?</span></span>.
+                  </p>
+                </div>
+
+                <!-- Tabla de Coeficientes del Extendido -->
+                <div class="space-y-3">
+                  <h5 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cálculo de Coeficientes Paso a Paso</h5>
+                  <div class="overflow-x-auto custom-scrollbar border border-slate-200/60 dark:border-slate-800/60 rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
+                    <table class="w-full text-left border-collapse text-xs md:text-sm">
+                      <thead>
+                        <tr class="bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200/60 dark:border-slate-800/60">
+                          <th class="py-3 px-4 text-center">Paso (i)</th>
+                          <th class="py-3 px-4 text-center">Residuo (r<sub>i</sub>)</th>
+                          <th class="py-3 px-4 text-center">Cociente (q<sub>i</sub>)</th>
+                          <th class="py-3 px-4 text-center">Coeficiente x<sub>i</sub></th>
+                          <th class="py-3 px-4 text-center">Coeficiente y<sub>i</sub></th>
+                          <th class="py-3 px-4 font-semibold text-center">Ecuación A'·x<sub>i</sub> + B'·y<sub>i</sub> = r<sub>i</sub></th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-extended-body" class="divide-y divide-slate-100 dark:divide-slate-800/40 font-mono text-center">
+                        <!-- Rellenado por JS -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400 italic">
+                    *Nota: La tabla se calcula usando los valores absolutos A' = |A| y B' = |B|. Los coeficientes finales se ajustan según el signo inicial de A y B.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DEPUNADOR / SIMULADOR DE CÓDIGO COMPUTACIONAL EN VIVO -->
+          <div class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <span class="flex h-2.5 w-2.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
+                  📟 Depurador de Código en Vivo
+                </h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Mira cómo la CPU ejecuta y cambia las variables línea por línea.</p>
+              </div>
+              
+              <!-- Selector de Algoritmo en Debugger -->
+              <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl self-start sm:self-center border border-slate-200/40 dark:border-slate-800">
+                <button id="btn-dbg-mode-classic" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-300 shadow-sm transition-all">
+                  Algoritmo Clásico
+                </button>
+                <button id="btn-dbg-mode-extended" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all ml-1">
+                  Algoritmo Extendido
+                </button>
+              </div>
+            </div>
+
+            <!-- Contenedor del Simulador: Lado Izq Código, Lado Der Variables -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <!-- IDE / Editor de Código -->
+              <div class="lg:col-span-7 bg-slate-950 text-slate-300 font-mono text-xs md:text-sm rounded-2xl border border-slate-800 p-4 relative overflow-x-auto shadow-2xl h-[310px] custom-scrollbar">
+                
+                <!-- Vista Código Clásico -->
+                <div id="code-classic-view" class="space-y-1.5">
+                  <div id="classic-line-1" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">1</span><span><span class="text-indigo-400">function</span> <span class="text-emerald-400">euclides</span>(a, b) {</span></div>
+                  <div id="classic-line-2" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">2</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> tempA = Math.<span class="text-sky-400">abs</span>(a);</span></div>
+                  <div id="classic-line-3" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">3</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> tempB = Math.<span class="text-sky-400">abs</span>(b);</span></div>
+                  <div id="classic-line-4" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">4</span><span>&nbsp;&nbsp;<span class="text-pink-400">while</span> (tempB &gt; <span class="text-amber-400">0</span>) {</span></div>
+                  <div id="classic-line-5" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> q = Math.<span class="text-sky-400">floor</span>(tempA / tempB);</span></div>
+                  <div id="classic-line-6" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> r = tempA % tempB;</span></div>
+                  <div id="classic-line-7" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;tempA = tempB;</span></div>
+                  <div id="classic-line-8" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;tempB = r;</span></div>
+                  <div id="classic-line-9" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">9</span><span>&nbsp;&nbsp;}</span></div>
+                  <div id="classic-line-10" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">10</span><span>&nbsp;&nbsp;<span class="text-pink-400">return</span> tempA;</span></div>
+                  <div id="classic-line-11" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">11</span><span>}</span></div>
+                </div>
+
+                <!-- Vista Código Extendido -->
+                <div id="code-extended-view" class="space-y-1.5 hidden">
+                  <div id="extended-line-1" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">1</span><span><span class="text-indigo-400">function</span> <span class="text-emerald-400">euclidesExtendido</span>(A, B) {</span></div>
+                  <div id="extended-line-2" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">2</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> r = [Math.<span class="text-sky-400">abs</span>(A), Math.<span class="text-sky-400">abs</span>(B)];</span></div>
+                  <div id="extended-line-3" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">3</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> x = [<span class="text-amber-400">1</span>, <span class="text-amber-400">0</span>], y = [<span class="text-amber-400">0</span>, <span class="text-amber-400">1</span>];</span></div>
+                  <div id="extended-line-4" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">4</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> i = <span class="text-amber-400">1</span>;</span></div>
+                  <div id="extended-line-5" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">5</span><span>&nbsp;&nbsp;<span class="text-pink-400">while</span> (r[i] !== <span class="text-amber-400">0</span>) {</span></div>
+                  <div id="extended-line-6" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> q = Math.<span class="text-sky-400">floor</span>(r[i-<span class="text-amber-400">1</span>] / r[i]);</span></div>
+                  <div id="extended-line-7" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;r.<span class="text-sky-400">push</span>(r[i-<span class="text-amber-400">1</span>] % r[i]);</span></div>
+                  <div id="extended-line-8" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;x.<span class="text-sky-400">push</span>(x[i-<span class="text-amber-400">1</span>] - q * x[i]);</span></div>
+                  <div id="extended-line-9" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;y.<span class="text-sky-400">push</span>(y[i-<span class="text-amber-400">1</span>] - q * y[i]);</span></div>
+                  <div id="extended-line-10" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">10</span><span>&nbsp;&nbsp;&nbsp;&nbsp;i++;</span></div>
+                  <div id="extended-line-11" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">11</span><span>&nbsp;&nbsp;}</span></div>
+                  <div id="extended-line-12" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">12</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> xFinal = A &lt; <span class="text-amber-400">0</span> ? -x[i-<span class="text-amber-400">1</span>] : x[i-<span class="text-amber-400">1</span>];</span></div>
+                  <div id="extended-line-13" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">13</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> yFinal = B &lt; <span class="text-amber-400">0</span> ? -y[i-<span class="text-amber-400">1</span>] : y[i-<span class="text-amber-400">1</span>];</span></div>
+                  <div id="extended-line-14" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">14</span><span>&nbsp;&nbsp;<span class="text-pink-400">return</span> { gcd: r[i-<span class="text-amber-400">1</span>], x: xFinal, y: yFinal };</span></div>
+                  <div id="extended-line-15" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">15</span><span>}</span></div>
+                </div>
+
               </div>
 
-              <!-- Tabla de Coeficientes del Extendido -->
-              <div class="space-y-3">
-                <h5 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Cálculo de Coeficientes Paso a Paso</h5>
-                <div class="overflow-x-auto custom-scrollbar border border-slate-200/60 dark:border-slate-800/60 rounded-xl bg-slate-50/50 dark:bg-slate-900/30">
-                  <table class="w-full text-left border-collapse text-xs md:text-sm">
-                    <thead>
-                      <tr class="bg-slate-100 dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200/60 dark:border-slate-800/60">
-                        <th class="py-3 px-4 text-center">Paso (i)</th>
-                        <th class="py-3 px-4 text-center">Residuo (r<sub>i</sub>)</th>
-                        <th class="py-3 px-4 text-center">Cociente (q<sub>i</sub>)</th>
-                        <th class="py-3 px-4 text-center">Coeficiente x<sub>i</sub></th>
-                        <th class="py-3 px-4 text-center">Coeficiente y<sub>i</sub></th>
-                        <th class="py-3 px-4 font-semibold text-center">Ecuación A'·x<sub>i</sub> + B'·y<sub>i</sub> = r<sub>i</sub></th>
-                      </tr>
-                    </thead>
-                    <tbody id="table-extended-body" class="divide-y divide-slate-100 dark:divide-slate-800/40 font-mono text-center">
-                      <!-- Se rellena con JS -->
-                    </tbody>
-                  </table>
+              <!-- Controles y Variables -->
+              <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
+                <!-- Controles -->
+                <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-4 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Controles de Ejecución</span>
+                    <span id="dbg-step-counter" class="text-xs font-mono font-bold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 px-2 py-0.5 rounded-lg border border-violet-200/35 font-semibold">Paso 0 / 0</span>
+                  </div>
+                  
+                  <div class="flex items-center justify-between gap-1">
+                    <button id="btn-dbg-restart" title="Reiniciar" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                      </svg>
+                    </button>
+                    <button id="btn-dbg-prev" title="Paso Anterior" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                      </svg>
+                    </button>
+                    <button id="btn-dbg-play" title="Auto Reproducción" class="flex-[2_2_0%] p-2 rounded-xl bg-violet-600 hover:bg-violet-500 dark:bg-violet-500 dark:hover:bg-violet-400 text-white flex justify-center items-center gap-1.5 transition-colors font-semibold text-xs shadow-md">
+                      <svg id="dbg-icon-play" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                        <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
+                      </svg>
+                      <svg id="dbg-icon-pause" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 hidden">
+                        <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm7.5 0a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                      </svg>
+                      <span id="dbg-btn-play-text">Auto</span>
+                    </button>
+                    <button id="btn-dbg-next" title="Paso Siguiente" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Slider -->
+                  <div class="pt-1.5 flex items-center gap-3">
+                    <input 
+                      type="range" 
+                      id="dbg-slider" 
+                      min="0" 
+                      max="10" 
+                      value="0" 
+                      class="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-violet-600 focus:outline-none"
+                    >
+                  </div>
                 </div>
-                <p class="text-[11px] text-slate-500 dark:text-slate-400 italic">
-                  *Nota: La tabla se calcula usando los valores absolutos A' = |A| y B' = |B|. Los coeficientes finales se ajustan según el signo inicial de A y B.
-                </p>
+
+                <!-- Variables de la CPU -->
+                <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[160px]">
+                  <div>
+                    <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">Variables Locales en CPU</h4>
+                    
+                    <!-- Variables Clásico -->
+                    <div id="dbg-vars-classic" class="grid grid-cols-2 gap-3 text-xs font-mono">
+                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">tempA:</span>
+                        <span id="dbg-var-tempa" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      </div>
+                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">tempB:</span>
+                        <span id="dbg-var-tempb" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      </div>
+                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">q:</span>
+                        <span id="dbg-var-q" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      </div>
+                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">r:</span>
+                        <span id="dbg-var-r" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      </div>
+                    </div>
+
+                    <!-- Variables Extendido -->
+                    <div id="dbg-vars-extended" class="space-y-2 text-xs font-mono hidden">
+                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                        <span class="text-slate-400">residuos (r):</span>
+                        <span id="dbg-var-ex-r" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all max-w-[70%] text-right">-</span>
+                      </div>
+                      <div class="grid grid-cols-2 gap-2">
+                        <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                          <span class="text-slate-400">coef x:</span>
+                          <span id="dbg-var-ex-x" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all text-right">-</span>
+                        </div>
+                        <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                          <span class="text-slate-400">coef y:</span>
+                          <span id="dbg-var-ex-y" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all text-right">-</span>
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-2 gap-2">
+                        <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                          <span class="text-slate-400">índice (i):</span>
+                          <span id="dbg-var-ex-i" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                        </div>
+                        <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
+                          <span class="text-slate-400">q (cociente):</span>
+                          <span id="dbg-var-ex-q" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Cuadro de Explicación -->
+                  <div class="mt-3 p-3 bg-violet-500/5 dark:bg-violet-500/10 border border-violet-500/20 text-slate-700 dark:text-slate-300 rounded-xl text-xs flex items-start gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 shrink-0 text-violet-500 mt-0.5">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.25v2.75a.75.75 0 0 0 1.5 0v-3.5A.75.75 0 0 0 10 9H9Z" clip-rule="evenodd" />
+                    </svg>
+                    <p id="dbg-explanation" class="leading-relaxed">Cargando...</p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENIDO PESTAÑA 2: CRIPTOGRAFÍA RSA -->
+      <div id="tab-content-cripto" class="space-y-6 hidden">
+        <!-- Título del visualizador RSA -->
+        <div class="text-center mb-6">
+          <span class="px-3 py-1 text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-full border border-emerald-200/30">
+            Criptografía de Clave Pública
+          </span>
+          <h2 class="text-2xl md:text-3xl font-extrabold mt-3 text-slate-900 dark:text-white">
+            Simulador de Cifrado RSA & Exponenciación
+          </h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-lg mx-auto">
+            Cifra y descifra texto usando la Identidad de Bézout obtenida anteriormente para calcular el inverso modular de la clave privada.
+          </p>
+        </div>
+
+        <!-- Tarjeta de llaves RSA -->
+        <div class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                🔑 Configuración de Llaves RSA
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Elige un preset de números primos para generar las claves.</p>
+            </div>
+            
+            <select id="rsa-key-preset" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50">
+              <option value="preset1">Preset 1: p=11, q=13 (n=143)</option>
+              <option value="preset2">Preset 2: p=13, q=17 (n=221)</option>
+              <option value="preset3">Preset 3: p=17, q=19 (n=323)</option>
+            </select>
+          </div>
+
+          <!-- Parámetros visuales -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-xs font-mono text-center">
+            <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/40 dark:border-slate-800/60">
+              <span class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider">Primos (p, q)</span>
+              <span id="rsa-val-pq" class="font-bold text-violet-600 dark:text-violet-400 text-sm">11, 13</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/40 dark:border-slate-800/60">
+              <span class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider">Módulo (n)</span>
+              <span id="rsa-val-n" class="font-bold text-violet-600 dark:text-violet-400 text-sm">143</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/40 dark:border-slate-800/60">
+              <span class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider">phi(n)</span>
+              <span id="rsa-val-phi" class="font-bold text-violet-600 dark:text-violet-400 text-sm">120</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/40 dark:border-slate-800/60">
+              <span class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider">Púb. (e)</span>
+              <span id="rsa-val-e" class="font-bold text-violet-600 dark:text-violet-400 text-sm">23</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/40 dark:border-slate-800/60">
+              <span class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider">Priv. (d)</span>
+              <span id="rsa-val-d" class="font-bold text-emerald-500 dark:text-emerald-400 text-sm">47</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario frase -->
+        <div class="space-y-4">
+          <label for="rsa-input-phrase" class="block text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Ingresa una frase o palabra a cifrar:
+          </label>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <input 
+              type="text" 
+              id="rsa-input-phrase" 
+              placeholder="Ej. HOLA MUNDO"
+              value="HOLA MUNDO"
+              class="flex-1 bg-slate-50/50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl py-4 px-5 text-lg font-bold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500/80 focus:border-transparent focus:bg-white dark:focus:bg-slate-950 transition-all duration-200 shadow-sm"
+            >
+            <button 
+              type="button" 
+              id="btn-rsa-encrypt"
+              class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/35 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex justify-center items-center gap-2"
+            >
+              Cifrar & Descifrar
+            </button>
+          </div>
+        </div>
+
+        <!-- Cifrado y descifrado lado a lado -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Cifrado -->
+          <div class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-5 space-y-4">
+            <h4 class="text-sm font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider flex items-center gap-2">
+              <span>🔒 Proceso de Cifrado</span>
+              <span class="text-[10px] font-mono lowercase text-slate-400 font-normal">(C = M<sup>e</sup> mod n)</span>
+            </h4>
+            
+            <div class="overflow-y-auto h-[180px] custom-scrollbar border border-slate-200/50 dark:border-slate-800/50 rounded-xl bg-slate-50/50 dark:bg-slate-900/20 p-3 space-y-2 text-xs font-mono" id="rsa-encryption-steps">
+              <!-- Rellenado por JS -->
+            </div>
+            
+            <div class="p-3 bg-violet-500/5 border border-violet-500/20 rounded-xl">
+              <span class="block text-[10px] text-slate-400 font-semibold uppercase">Criptograma (C):</span>
+              <div id="rsa-ciphertext-output" class="text-sm font-mono font-bold text-slate-800 dark:text-slate-100 break-all select-all pt-1">
+                -
+              </div>
+            </div>
+          </div>
+
+          <!-- Descifrado -->
+          <div class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-5 space-y-4">
+            <h4 class="text-sm font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+              <span>🔓 Proceso de Descifrado</span>
+              <span class="text-[10px] font-mono lowercase text-slate-400 font-normal">(M = C<sup>d</sup> mod n)</span>
+            </h4>
+
+            <div class="overflow-y-auto h-[180px] custom-scrollbar border border-slate-200/50 dark:border-slate-800/50 rounded-xl bg-slate-50/50 dark:bg-slate-900/20 p-3 space-y-2 text-xs font-mono" id="rsa-decryption-steps">
+              <!-- Rellenado por JS -->
+            </div>
+
+            <div class="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-xl">
+              <span class="block text-[10px] text-slate-400 font-semibold uppercase">Frase Descifrada (M):</span>
+              <div id="rsa-plaintext-output" class="text-sm font-mono font-bold text-slate-800 dark:text-slate-100 pt-1">
+                -
               </div>
             </div>
           </div>
         </div>
 
-        <!-- SECCIÓN NUEVA: DEPUNADOR / SIMULADOR DE CÓDIGO COMPUTACIONAL EN VIVO -->
-        <div class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-6 space-y-6">
+        <!-- DEPURADOR DE EXPONENCIACIÓN MODULAR -->
+        <div id="rsa-debugger-container" class="bg-white/40 dark:bg-slate-950/40 backdrop-blur-sm border border-slate-200/60 dark:border-slate-800/60 rounded-2xl p-6 space-y-6 hidden">
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <span class="flex h-2.5 w-2.5 rounded-full bg-indigo-600 dark:bg-indigo-400"></span>
-                📟 Depurador de Código en Vivo
+                📟 Depurador de Exponenciación Modular
               </h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Mira cómo la CPU ejecuta y cambia las variables línea por línea.</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Analiza el algoritmo Square & Multiply usado por la CPU para procesar un carácter.</p>
             </div>
-            
-            <!-- Selector de Algoritmo en Debugger -->
-            <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl self-start sm:self-center border border-slate-200/40 dark:border-slate-800">
-              <button id="btn-dbg-mode-classic" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-300 shadow-sm transition-all">
-                Algoritmo Clásico
-              </button>
-              <button id="btn-dbg-mode-extended" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all ml-1">
-                Algoritmo Extendido
-              </button>
+
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Selector carácter -->
+              <div class="flex items-center gap-2 text-xs">
+                <label class="text-slate-500 font-medium">Carácter:</label>
+                <select id="rsa-dbg-char-select" class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-2 py-1 font-bold text-slate-850 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-500">
+                  <!-- Rellenado por JS -->
+                </select>
+              </div>
+
+              <!-- Toggle Cifrar/Descifrar -->
+              <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-xl border border-slate-200/40 dark:border-slate-800">
+                <button id="btn-rsa-dbg-mode-enc" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-300 shadow-sm transition-all">
+                  Cifrar (e)
+                </button>
+                <button id="btn-rsa-dbg-mode-dec" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all ml-1">
+                  Descifrar (d)
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Contenedor del Simulador: Lado Izq Código, Lado Der Variables -->
+          <!-- IDE & Variables -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <!-- IDE / Editor de Código (Columnas 7 en LG) -->
-            <div class="lg:col-span-7 bg-slate-950 text-slate-300 font-mono text-xs md:text-sm rounded-2xl border border-slate-800 p-4 relative overflow-x-auto shadow-2xl h-[310px] custom-scrollbar">
-              
-              <!-- Vista Código Clásico -->
-              <div id="code-classic-view" class="space-y-1.5">
-                <div id="classic-line-1" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">1</span><span><span class="text-indigo-400">function</span> <span class="text-emerald-400">euclides</span>(a, b) {</span></div>
-                <div id="classic-line-2" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">2</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> tempA = Math.<span class="text-sky-400">abs</span>(a);</span></div>
-                <div id="classic-line-3" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">3</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> tempB = Math.<span class="text-sky-400">abs</span>(b);</span></div>
-                <div id="classic-line-4" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">4</span><span>&nbsp;&nbsp;<span class="text-pink-400">while</span> (tempB &gt; <span class="text-amber-400">0</span>) {</span></div>
-                <div id="classic-line-5" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> q = Math.<span class="text-sky-400">floor</span>(tempA / tempB);</span></div>
-                <div id="classic-line-6" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> r = tempA % tempB;</span></div>
-                <div id="classic-line-7" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;tempA = tempB;</span></div>
-                <div id="classic-line-8" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;tempB = r;</span></div>
-                <div id="classic-line-9" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">9</span><span>&nbsp;&nbsp;}</span></div>
-                <div id="classic-line-10" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">10</span><span>&nbsp;&nbsp;<span class="text-pink-400">return</span> tempA;</span></div>
-                <div id="classic-line-11" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">11</span><span>}</span></div>
+            <!-- IDE Exponenciación -->
+            <div class="lg:col-span-7 bg-slate-950 text-slate-300 font-mono text-xs md:text-sm rounded-2xl border border-slate-800 p-4 relative overflow-x-auto shadow-2xl h-[330px] custom-scrollbar">
+              <div id="code-expo-view" class="space-y-1.5">
+                <div id="expo-line-1" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">1</span><span><span class="text-indigo-400">function</span> <span class="text-emerald-400">exponenciacionModular</span>(base, exp, mod) {</span></div>
+                <div id="expo-line-2" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">2</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> res = <span class="text-amber-400">1</span>;</span></div>
+                <div id="expo-line-3" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">3</span><span>&nbsp;&nbsp;base = base % mod;</span></div>
+                <div id="expo-line-4" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">4</span><span>&nbsp;&nbsp;<span class="text-pink-400">while</span> (exp &gt; <span class="text-amber-400">0</span>) {</span></div>
+                <div id="expo-line-5" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">5</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-pink-400">if</span> (exp % <span class="text-amber-400">2</span> === <span class="text-amber-400">1</span>) {</span></div>
+                <div id="expo-line-6" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;res = (res * base) % mod;</span></div>
+                <div id="expo-line-7" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
+                <div id="expo-line-8" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;base = (base * base) % mod;</span></div>
+                <div id="expo-line-9" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;exp = Math.<span class="text-sky-400">floor</span>(exp / <span class="text-amber-400">2</span>);</span></div>
+                <div id="expo-line-10" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">10</span><span>&nbsp;&nbsp;}</span></div>
+                <div id="expo-line-11" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">11</span><span>&nbsp;&nbsp;<span class="text-pink-400">return</span> res;</span></div>
+                <div id="expo-line-12" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">12</span><span>}</span></div>
               </div>
-
-              <!-- Vista Código Extendido -->
-              <div id="code-extended-view" class="space-y-1.5 hidden">
-                <div id="extended-line-1" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">1</span><span><span class="text-indigo-400">function</span> <span class="text-emerald-400">euclidesExtendido</span>(A, B) {</span></div>
-                <div id="extended-line-2" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">2</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> r = [Math.<span class="text-sky-400">abs</span>(A), Math.<span class="text-sky-400">abs</span>(B)];</span></div>
-                <div id="extended-line-3" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">3</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> x = [<span class="text-amber-400">1</span>, <span class="text-amber-400">0</span>], y = [<span class="text-amber-400">0</span>, <span class="text-amber-400">1</span>];</span></div>
-                <div id="extended-line-4" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">4</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> i = <span class="text-amber-400">1</span>;</span></div>
-                <div id="extended-line-5" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">5</span><span>&nbsp;&nbsp;<span class="text-pink-400">while</span> (r[i] !== <span class="text-amber-400">0</span>) {</span></div>
-                <div id="extended-line-6" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">6</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-indigo-400">let</span> q = Math.<span class="text-sky-400">floor</span>(r[i-<span class="text-amber-400">1</span>] / r[i]);</span></div>
-                <div id="extended-line-7" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">7</span><span>&nbsp;&nbsp;&nbsp;&nbsp;r.<span class="text-sky-400">push</span>(r[i-<span class="text-amber-400">1</span>] % r[i]);</span></div>
-                <div id="extended-line-8" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;x.<span class="text-sky-400">push</span>(x[i-<span class="text-amber-400">1</span>] - q * x[i]);</span></div>
-                <div id="extended-line-9" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;y.<span class="text-sky-400">push</span>(y[i-<span class="text-amber-400">1</span>] - q * y[i]);</span></div>
-                <div id="extended-line-10" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">10</span><span>&nbsp;&nbsp;&nbsp;&nbsp;i++;</span></div>
-                <div id="extended-line-11" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">11</span><span>&nbsp;&nbsp;}</span></div>
-                <div id="extended-line-12" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">12</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> xFinal = A &lt; <span class="text-amber-400">0</span> ? -x[i-<span class="text-amber-400">1</span>] : x[i-<span class="text-amber-400">1</span>];</span></div>
-                <div id="extended-line-13" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">13</span><span>&nbsp;&nbsp;<span class="text-indigo-400">let</span> yFinal = B &lt; <span class="text-amber-400">0</span> ? -y[i-<span class="text-amber-400">1</span>] : y[i-<span class="text-amber-400">1</span>];</span></div>
-                <div id="extended-line-14" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">14</span><span>&nbsp;&nbsp;<span class="text-pink-400">return</span> { gcd: r[i-<span class="text-amber-400">1</span>], x: xFinal, y: yFinal };</span></div>
-                <div id="extended-line-15" class="py-0.5 px-3 border-l-4 border-transparent transition-all duration-150 flex"><span class="w-6 text-slate-600 select-none mr-3 text-right">15</span><span>}</span></div>
-              </div>
-
             </div>
 
-            <!-- Controles y Variables (Columnas 5 en LG) -->
+            <!-- Variables & Controls -->
             <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
-              
-              <!-- Controles del Depurador -->
+              <!-- Controls -->
               <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-4 space-y-3">
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Controles de Ejecución</span>
-                  <span id="dbg-step-counter" class="text-xs font-mono font-bold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 px-2 py-0.5 rounded-lg border border-violet-200/35">Paso 0 / 0</span>
+                  <span id="rsa-dbg-step-counter" class="text-xs font-mono font-bold bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 px-2 py-0.5 rounded-lg border border-violet-200/35">Paso 0 / 0</span>
                 </div>
-                
-                <!-- Botonera -->
+
                 <div class="flex items-center justify-between gap-1">
-                  <!-- Botón Reiniciar -->
-                  <button id="btn-dbg-restart" title="Reiniciar" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                  <button id="btn-rsa-dbg-restart" title="Reiniciar" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
                   </button>
-
-                  <!-- Botón Paso Anterior -->
-                  <button id="btn-dbg-prev" title="Paso Anterior" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                  <button id="btn-rsa-dbg-prev" title="Paso Anterior" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                     </svg>
                   </button>
-
-                  <!-- Botón Play/Pause -->
-                  <button id="btn-dbg-play" title="Auto Reproducción" class="flex-[2_2_0%] p-2 rounded-xl bg-violet-600 hover:bg-violet-500 dark:bg-violet-500 dark:hover:bg-violet-400 text-white flex justify-center items-center gap-1.5 transition-colors font-semibold text-xs shadow-md">
-                    <!-- Icono Play -->
-                    <svg id="dbg-icon-play" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
+                  <button id="btn-rsa-dbg-play" title="Auto Reproducción" class="flex-[2_2_0%] p-2 rounded-xl bg-violet-600 hover:bg-violet-500 dark:bg-violet-500 dark:hover:bg-violet-400 text-white flex justify-center items-center gap-1.5 transition-colors font-semibold text-xs shadow-md">
+                    <svg id="rsa-dbg-icon-play" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4">
                       <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
                     </svg>
-                    <!-- Icono Pause (inicialmente oculto) -->
-                    <svg id="dbg-icon-pause" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 hidden">
+                    <svg id="rsa-dbg-icon-pause" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 hidden">
                       <path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm7.5 0a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                     </svg>
-                    <span id="dbg-btn-play-text">Auto</span>
+                    <span id="rsa-dbg-btn-play-text">Auto</span>
                   </button>
-
-                  <!-- Botón Paso Siguiente -->
-                  <button id="btn-dbg-next" title="Paso Siguiente" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
+                  <button id="btn-rsa-dbg-next" title="Paso Siguiente" class="flex-1 p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex justify-center items-center transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
@@ -439,10 +738,10 @@
                 </div>
 
                 <!-- Slider -->
-                <div class="pt-1.5 flex items-center gap-3">
+                <div class="pt-1 flex items-center gap-3">
                   <input 
                     type="range" 
-                    id="dbg-slider" 
+                    id="rsa-dbg-slider" 
                     min="0" 
                     max="10" 
                     value="0" 
@@ -451,126 +750,99 @@
                 </div>
               </div>
 
-              <!-- Variables de Estado de la CPU -->
-              <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[160px]">
+              <!-- Variables de exponenciación -->
+              <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 rounded-2xl p-4 flex-1 flex flex-col justify-between min-h-[170px]">
                 <div>
-                  <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">Variables Locales en CPU</h4>
-                  
-                  <!-- Variables Modo Clásico -->
-                  <div id="dbg-vars-classic" class="grid grid-cols-2 gap-3 text-xs font-mono">
+                  <h4 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2.5">Variables de Exponenciación</h4>
+                  <div class="grid grid-cols-2 gap-2 text-xs font-mono">
                     <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                      <span class="text-slate-400">tempA:</span>
-                      <span id="dbg-var-tempa" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      <span class="text-slate-400">base:</span>
+                      <span id="rsa-dbg-var-base" class="font-bold text-violet-600 dark:text-violet-400">-</span>
                     </div>
                     <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                      <span class="text-slate-400">tempB:</span>
-                      <span id="dbg-var-tempb" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      <span class="text-slate-400">exp:</span>
+                      <span id="rsa-dbg-var-exp" class="font-bold text-violet-600 dark:text-violet-400">-</span>
                     </div>
                     <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                      <span class="text-slate-400">q:</span>
-                      <span id="dbg-var-q" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      <span class="text-slate-400">mod (n):</span>
+                      <span id="rsa-dbg-var-mod" class="font-bold text-violet-600 dark:text-violet-400">-</span>
                     </div>
                     <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                      <span class="text-slate-400">r:</span>
-                      <span id="dbg-var-r" class="font-bold text-violet-600 dark:text-violet-400">-</span>
+                      <span class="text-slate-400">res:</span>
+                      <span id="rsa-dbg-var-res" class="font-bold text-violet-600 dark:text-violet-400">-</span>
                     </div>
                   </div>
-
-                  <!-- Variables Modo Extendido -->
-                  <div id="dbg-vars-extended" class="space-y-2 text-xs font-mono hidden">
+                  <div class="mt-2 text-xs font-mono">
                     <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                      <span class="text-slate-400">residuos (r):</span>
-                      <span id="dbg-var-ex-r" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all max-w-[70%] text-right">-</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                        <span class="text-slate-400">coef x:</span>
-                        <span id="dbg-var-ex-x" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all text-right">-</span>
-                      </div>
-                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                        <span class="text-slate-400">coef y:</span>
-                        <span id="dbg-var-ex-y" class="font-bold text-violet-600 dark:text-violet-400 text-[10px] break-all text-right">-</span>
-                      </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                        <span class="text-slate-400">índice (i):</span>
-                        <span id="dbg-var-ex-i" class="font-bold text-violet-600 dark:text-violet-400">-</span>
-                      </div>
-                      <div class="p-2 bg-white dark:bg-slate-950 rounded-xl border border-slate-200/40 dark:border-slate-800 flex justify-between items-center">
-                        <span class="text-slate-400">q (cociente):</span>
-                        <span id="dbg-var-ex-q" class="font-bold text-violet-600 dark:text-violet-400">-</span>
-                      </div>
+                      <span class="text-slate-400">exp % 2 (¿impar?):</span>
+                      <span id="rsa-dbg-var-is-odd" class="font-bold text-violet-600 dark:text-violet-400">-</span>
                     </div>
                   </div>
                 </div>
 
-                <!-- Cuadro de Explicación Corta -->
-                <div class="mt-3 p-3 bg-violet-500/5 dark:bg-violet-500/10 border border-violet-500/20 text-slate-700 dark:text-slate-300 rounded-xl text-xs flex items-start gap-2">
+                <!-- Explicación -->
+                <div class="mt-3 p-2.5 bg-violet-500/5 dark:bg-violet-500/10 border border-violet-500/20 text-slate-700 dark:text-slate-300 rounded-xl text-xs flex items-start gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 shrink-0 text-violet-500 mt-0.5">
                     <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.25v2.75a.75.75 0 0 0 1.5 0v-3.5A.75.75 0 0 0 10 9H9Z" clip-rule="evenodd" />
                   </svg>
-                  <p id="dbg-explanation" class="leading-relaxed">Cargando...</p>
+                  <p id="rsa-dbg-explanation" class="leading-relaxed">Cargando...</p>
                 </div>
-
               </div>
-
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Sabías Que / Contexto Educativo -->
-        <div id="education-card" class="bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden transition-all duration-300">
-          <!-- Decoración SVG en background de la tarjeta -->
-          <div class="absolute right-[-5%] bottom-[-15%] w-48 h-48 opacity-10 text-white pointer-events-none">
-            <svg viewBox="0 0 200 200" fill="currentColor">
-              <path d="M 40,80 A 40,40 0 1,0 120,80 A 40,40 0 1,0 40,80 Z M 120,120 A 40,40 0 1,0 200,120 A 40,40 0 1,0 120,120 Z" />
-            </svg>
+      <!-- SECCIÓN EDUCATIVA "Sabías Que" -->
+      <div id="education-card" class="mt-8 bg-gradient-to-br from-violet-600 to-indigo-700 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden transition-all duration-300 z-10">
+        <!-- Decoración SVG en background de la tarjeta -->
+        <div class="absolute right-[-5%] bottom-[-15%] w-48 h-48 opacity-10 text-white pointer-events-none">
+          <svg viewBox="0 0 200 200" fill="currentColor">
+            <path d="M 40,80 A 40,40 0 1,0 120,80 A 40,40 0 1,0 40,80 Z M 120,120 A 40,40 0 1,0 200,120 A 40,40 0 1,0 120,120 Z" />
+          </svg>
+        </div>
+        
+        <div class="relative z-10 space-y-4">
+          <div class="flex items-center gap-3">
+            <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l8.982-11.825a.9.9 0 0 0-.695-1.428H12.89l.813-5.096a.9.9 0 0 0-1.57-.681L3.153 13.82a.9.9 0 0 0 .695 1.428H9.81Z" />
+              </svg>
+            </div>
+            <h4 class="font-bold text-lg md:text-xl">¿Sabías que...? (Aplicación en Criptografía)</h4>
           </div>
           
-          <div class="relative z-10 space-y-4">
-            <div class="flex items-center gap-3">
-              <div class="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 21l8.982-11.825a.9.9 0 0 0-.695-1.428H12.89l.813-5.096a.9.9 0 0 0-1.57-.681L3.153 13.82a.9.9 0 0 0 .695 1.428H9.81Z" />
-                </svg>
-              </div>
-              <h4 class="font-bold text-lg md:text-xl">¿Sabías que...? (Aplicación en Criptografía)</h4>
-            </div>
-            
-            <p class="text-sm text-indigo-100 leading-relaxed">
-              El Algoritmo de Euclides Extendido es una pieza fundamental en la criptografía moderna de clave pública, como el protocolo <strong>RSA</strong>.
-            </p>
-            <p class="text-sm text-indigo-100 leading-relaxed">
-              Para cifrar o firmar mensajes, RSA necesita calcular un <strong>Inverso Multiplicativo Modular</strong>. Es decir, dado un exponente de cifrado <span class="font-mono text-white font-bold bg-white/10 px-1 rounded">e</span> y el valor de la función φ(n), se busca una clave privada <span class="font-mono text-white font-bold bg-white/10 px-1 rounded">d</span> tal que:
-            </p>
-            
-            <!-- Bloque de fórmula -->
-            <div class="py-2.5 px-4 bg-white/10 backdrop-blur-md rounded-xl inline-block font-mono text-sm border border-white/10 shadow-sm">
-              e · d ≡ 1 (mod φ(n))
-            </div>
-            
-            <p class="text-sm text-indigo-100 leading-relaxed">
-              Esto significa que <span class="font-mono font-semibold text-white">e · d - k · φ(n) = 1</span>. ¡Esta es exactamente la <strong>Identidad de Bézout</strong>! Si resolvemos el algoritmo extendido para <span class="font-mono text-white">e</span> y <span class="font-mono text-white">φ(n)</span>, obtenemos el coeficiente <span class="font-mono text-white">d</span> como el inverso de <span class="font-mono text-white">e</span>.
-            </p>
+          <p class="text-sm text-indigo-100 leading-relaxed">
+            El Algoritmo de Euclides Extendido es una pieza fundamental en la criptografía moderna de clave pública, como el protocolo <strong>RSA</strong>.
+          </p>
+          <p class="text-sm text-indigo-100 leading-relaxed">
+            Para cifrar o firmar mensajes, RSA necesita calcular un <strong>Inverso Multiplicativo Modular</strong>. Es decir, dado un exponente de cifrado <span class="font-mono text-white font-bold bg-white/10 px-1 rounded">e</span> y el valor de la función φ(n), se busca una clave privada <span class="font-mono text-white font-bold bg-white/10 px-1 rounded">d</span> tal que:
+          </p>
+          
+          <!-- Bloque de fórmula -->
+          <div class="py-2.5 px-4 bg-white/10 backdrop-blur-md rounded-xl inline-block font-mono text-sm border border-white/10 shadow-sm">
+            e · d ≡ 1 (mod φ(n))
+          </div>
+          
+          <p class="text-sm text-indigo-100 leading-relaxed">
+            Esto significa que <span class="font-mono font-semibold text-white">e · d - k · φ(n) = 1</span>. ¡Esta es exactamente la <strong>Identidad de Bézout</strong>! Si resolvemos el algoritmo extendido para <span class="font-mono text-white">e</span> y <span class="font-mono text-white">φ(n)</span>, obtenemos el coeficiente <span class="font-mono text-white">d</span> como el inverso de <span class="font-mono text-white">e</span>.
+          </p>
 
-            <!-- Bloque interactivo dinámico de inverso modular -->
-            <div id="crypto-dynamic-box" class="pt-4 border-t border-white/20 hidden">
-              <h5 class="text-xs font-bold uppercase tracking-wider text-indigo-200 mb-2">
-                Demostración Dinámica con tus números:
-              </h5>
-              <div class="bg-black/20 p-4 rounded-2xl border border-white/5 space-y-2.5 text-xs text-indigo-100">
-                <div id="crypto-inverse-result-a">
-                  <!-- Se rellena dinámicamente con JS -->
-                </div>
-                <div id="crypto-inverse-result-b">
-                  <!-- Se rellena dinámicamente con JS -->
-                </div>
+          <!-- Bloque interactivo dinámico de inverso modular -->
+          <div id="crypto-dynamic-box" class="pt-4 border-t border-white/20 hidden">
+            <h5 class="text-xs font-bold uppercase tracking-wider text-indigo-200 mb-2">
+              Demostración Dinámica con tus números:
+            </h5>
+            <div class="bg-black/20 p-4 rounded-2xl border border-white/5 space-y-2.5 text-xs text-indigo-100">
+              <div id="crypto-inverse-result-a">
+                <!-- Se rellena dinámicamente con JS -->
+              </div>
+              <div id="crypto-inverse-result-b">
+                <!-- Se rellena dinámicamente con JS -->
               </div>
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -583,7 +855,32 @@
 
   <!-- Script de la lógica interactiva -->
   <script>
-    // Referencias de elementos del DOM
+    // Referencias de elementos del DOM de navegación
+    const tabEuclides = document.getElementById('tab-euclides');
+    const tabCripto = document.getElementById('tab-cripto');
+    const tabContentEuclides = document.getElementById('tab-content-euclides');
+    const tabContentCripto = document.getElementById('tab-content-cripto');
+
+    // Manejo de cambio de Pestañas
+    tabEuclides.addEventListener('click', () => {
+      tabEuclides.className = "flex-1 pb-4 border-b-2 border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400 transition-all flex items-center justify-center gap-2";
+      tabCripto.className = "flex-1 pb-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 border-b-2 border-transparent transition-all flex items-center justify-center gap-2";
+      tabContentEuclides.classList.remove('hidden');
+      tabContentCripto.classList.add('hidden');
+      stopRsaAutoPlay();
+    });
+
+    tabCripto.addEventListener('click', () => {
+      tabCripto.className = "flex-1 pb-4 border-b-2 border-violet-600 text-violet-600 dark:border-violet-400 dark:text-violet-400 transition-all flex items-center justify-center gap-2";
+      tabEuclides.className = "flex-1 pb-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 border-b-2 border-transparent transition-all flex items-center justify-center gap-2";
+      tabContentEuclides.classList.add('hidden');
+      tabContentCripto.classList.remove('hidden');
+      stopAutoPlay();
+      // Inicializar el cifrado la primera vez
+      runRsaCip();
+    });
+
+    // Referencias de elementos del DOM: Tema y Euclides
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -619,7 +916,7 @@
     const cryptoInverseResultA = document.getElementById('crypto-inverse-result-a');
     const cryptoInverseResultB = document.getElementById('crypto-inverse-result-b');
 
-    // Referencias Depurador de Código
+    // Referencias Depurador de Código Euclides
     const btnDbgClassic = document.getElementById('btn-dbg-mode-classic');
     const btnDbgExtended = document.getElementById('btn-dbg-mode-extended');
     const codeClassicView = document.getElementById('code-classic-view');
@@ -654,7 +951,7 @@
     // Estado del Acordeón
     let isAccordionOpen = false;
 
-    // Estado del Depurador
+    // Estado del Depurador Euclides
     let debugMode = 'classic'; // 'classic' o 'extended'
     let debugClassicTrace = [];
     let debugExtendedTrace = [];
@@ -672,11 +969,9 @@
       }
     }
     
-    // Inicializar botones de tema al cargar
     updateThemeToggleButtons();
 
     themeToggleBtn.addEventListener('click', function() {
-      // Alternar clase dark
       if (document.documentElement.classList.contains('dark')) {
         document.documentElement.classList.remove('dark');
         localStorage.theme = 'light';
@@ -691,17 +986,11 @@
     window.loadExample = function(a, b) {
       inputA.value = a;
       inputB.value = b;
-      
-      // Limpiar errores visuales
       clearErrors();
-      
-      // Animación rápida de input focus
       [inputA, inputB].forEach(input => {
         input.classList.add('ring-4', 'ring-violet-500/20');
         setTimeout(() => input.classList.remove('ring-4', 'ring-violet-500/20'), 500);
       });
-
-      // Calcular inmediatamente
       calculateGcd();
     };
 
@@ -714,7 +1003,6 @@
       infoNotice.classList.add('hidden');
     }
 
-    // Validar entradas en caliente al tipear
     inputA.addEventListener('input', () => {
       if (inputA.value.trim() !== "") {
         errorA.classList.add('hidden');
@@ -749,16 +1037,13 @@
       accordionIcon.classList.remove('rotate-180');
     }
 
-    // Ajustar altura del acordeón si está abierto y cambia el contenido dinámico
     function adjustAccordionHeight() {
       if (isAccordionOpen) {
         accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
       }
     }
 
-    // --- DEPURADOR DE CÓDIGO (LÓGICA) ---
-    
-    // Generar secuencia de depuración para algoritmo Clásico
+    // --- DEPURADOR DE CÓDIGO EUCLIDES ---
     function getClassicTrace(aOrig, bOrig) {
       let trace = [];
       let a = Math.abs(aOrig);
@@ -840,7 +1125,6 @@
       return trace;
     }
 
-    // Generar secuencia de depuración para algoritmo Extendido
     function getExtendedTrace(aOrig, bOrig) {
       let trace = [];
       let A = Math.abs(aOrig);
@@ -927,53 +1211,48 @@
         trace.push({
           line: 5,
           vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q },
-          explanation: `Evaluando condición: ¿r[${i}] (${r_arr[i]}) !== 0? Falso (el residuo es 0). Rompemos el ciclo.`
+          explanation: `Evaluando condición: ¿r[${i}] (${r_arr[i]}) !== 0? Falso. Rompemos el ciclo.`
         });
       }
       
       let xAbsFinal = B === 0 ? 1 : x_arr[i-1];
       let yAbsFinal = B === 0 ? 0 : y_arr[i-1];
-      
       let xFinal = aOrig < 0 ? -xAbsFinal : xAbsFinal;
       trace.push({
         line: 12,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: 'sin definir' },
-        explanation: `Ajustamos el coeficiente x final según el signo del número A original: x = ${xFinal}.`
+        explanation: `Ajustamos el coeficiente x final según el signo del número A original: xFinal = ${xFinal}.`
       });
       
       let yFinal = bOrig < 0 ? -yAbsFinal : yAbsFinal;
       trace.push({
         line: 13,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: yFinal },
-        explanation: `Ajustamos el coeficiente y final según el signo del número B original: y = ${yFinal}.`
+        explanation: `Ajustamos el coeficiente y final según el signo del número B original: yFinal = ${yFinal}.`
       });
       
       trace.push({
         line: 14,
         vars: { r: `[${r_arr.join(', ')}]`, x: `[${x_arr.join(', ')}]`, y: `[${y_arr.join(', ')}]`, i: i, q, xFinal: xFinal, yFinal: yFinal },
-        explanation: `Retornamos el MCD obtenido (r[${i-1}] = ${r_arr[i-1]}) y los coeficientes de Bézout ajustados (x = ${xFinal}, y = ${yFinal}).`
+        explanation: `Retornamos el MCD obtenido (r[${i-1}] = ${r_arr[i-1]}) y los coeficientes de Bézout finales: x = ${xFinal}, y = ${yFinal}.`
       });
       
       return trace;
     }
 
-    // Inicializar y dibujar un paso específico del Depurador
     function renderDebugStep() {
       const trace = debugMode === 'classic' ? debugClassicTrace : debugExtendedTrace;
       if (trace.length === 0) return;
 
-      // Limitar índice de debug
       if (currentDebugIndex >= trace.length) currentDebugIndex = trace.length - 1;
       if (currentDebugIndex < 0) currentDebugIndex = 0;
 
       const stepData = trace[currentDebugIndex];
 
-      // 1. Actualizar Slider e Indicadores de paso
       dbgSlider.max = trace.length - 1;
       dbgSlider.value = currentDebugIndex;
       dbgStepCounter.innerText = `Paso ${currentDebugIndex + 1} / ${trace.length}`;
 
-      // 2. Limpiar highlights anteriores y aplicar el nuevo
       const codeViewId = debugMode === 'classic' ? 'classic' : 'extended';
       const maxLines = debugMode === 'classic' ? 11 : 15;
       
@@ -987,22 +1266,17 @@
       const activeLineEl = document.getElementById(`${codeViewId}-line-${stepData.line}`);
       if (activeLineEl) {
         activeLineEl.classList.add('bg-violet-500/25', 'border-l-violet-500', 'text-white', 'font-semibold');
-        
-        // Auto Scroll suave dentro del IDE si es necesario
         activeLineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
 
-      // 3. Actualizar Explicación
       dbgExplanation.innerHTML = stepData.explanation;
 
-      // 4. Actualizar Variables locales en pantalla
       if (debugMode === 'classic') {
         dbgVarTempA.innerText = stepData.vars.tempA;
         dbgVarTempB.innerText = stepData.vars.tempB;
         dbgVarQ.innerText = stepData.vars.q;
         dbgVarR.innerText = stepData.vars.r;
         
-        // Animaciones rápidas al cambiar de valores
         [dbgVarTempA, dbgVarTempB, dbgVarQ, dbgVarR].forEach(el => {
           el.classList.add('scale-110', 'text-emerald-400');
           setTimeout(() => el.classList.remove('scale-110', 'text-emerald-400'), 150);
@@ -1021,7 +1295,6 @@
       }
     }
 
-    // Cambiar modo del depurador (Clásico / Extendido)
     function setDebugMode(mode) {
       debugMode = mode;
       stopAutoPlay();
@@ -1053,7 +1326,6 @@
     btnDbgClassic.addEventListener('click', () => setDebugMode('classic'));
     btnDbgExtended.addEventListener('click', () => setDebugMode('extended'));
 
-    // Controles de paso
     btnDbgNext.addEventListener('click', () => {
       stopAutoPlay();
       const trace = debugMode === 'classic' ? debugClassicTrace : debugExtendedTrace;
@@ -1083,7 +1355,6 @@
       renderDebugStep();
     });
 
-    // Auto Play (Simulador automático)
     function toggleAutoPlay() {
       if (autoPlayInterval) {
         stopAutoPlay();
@@ -1105,9 +1376,9 @@
           currentDebugIndex++;
           renderDebugStep();
         } else {
-          stopAutoPlay(); // Parar si llega al final
+          stopAutoPlay();
         }
-      }, 1500); // 1.5s por paso
+      }, 1500);
     }
 
     function stopAutoPlay() {
@@ -1124,17 +1395,14 @@
 
     btnDbgPlay.addEventListener('click', toggleAutoPlay);
 
-    // --- CÁLCULO DEL ALGORITMO ---
+    // --- CÁLCULO DEL ALGORITMO DE EUCLIDES ---
     btnCalculate.addEventListener('click', calculateGcd);
 
     function calculateGcd() {
-      // Limpiar errores previos
       clearErrors();
 
-      // Recoger valores
       const valAStr = inputA.value.trim();
       const valBStr = inputB.value.trim();
-
       let hasError = false;
 
       if (valAStr === "") {
@@ -1153,7 +1421,6 @@
       const aOrig = parseInt(valAStr, 10);
       const bOrig = parseInt(valBStr, 10);
 
-      // Validar caso (0,0)
       if (aOrig === 0 && bOrig === 0) {
         errorA.classList.remove('hidden');
         errorA.querySelector('span').innerText = "Ambos números no pueden ser cero.";
@@ -1164,35 +1431,27 @@
         return;
       }
 
-      // Validar si hay números negativos y mostrar aviso amistoso
-      let isNegative = false;
       let notices = [];
       if (aOrig < 0 || bOrig < 0) {
-        isNegative = true;
         if (aOrig < 0) notices.push(`|A| = ${Math.abs(aOrig)}`);
         if (bOrig < 0) notices.push(`|B| = ${Math.abs(bOrig)}`);
         infoNoticeText.innerHTML = `Detectamos números negativos. El algoritmo de Euclides se resolverá usando valores absolutos: <strong>${notices.join(' y ')}</strong>. Los coeficientes de Bézout finales se adaptarán correspondientemente.`;
         infoNotice.classList.remove('hidden');
       }
 
-      // Valores absolutos para el algoritmo
       const A = Math.abs(aOrig);
       const B = Math.abs(bOrig);
 
-      // Generar los traces del depurador
       debugClassicTrace = getClassicTrace(aOrig, bOrig);
       debugExtendedTrace = getExtendedTrace(aOrig, bOrig);
       
-      // Reiniciar depurador en modo Clásico
       setDebugMode('classic');
 
-      // 1. Ejecutar Algoritmo de Euclides Clásico
       let classicSteps = [];
       let currentA = A;
       let currentB = B;
       let stepCount = 0;
 
-      // Si B es mayor que A en el inicio, el primer paso simplemente los intercambiará.
       if (currentB === 0) {
         classicSteps.push({
           step: 1,
@@ -1225,7 +1484,6 @@
 
       const gcdResult = currentA;
 
-      // 2. Ejecutar Algoritmo de Euclides Extendido
       let r_arr = [A, B];
       let q_arr = [null, null];
       let x_arr = [1, 0];
@@ -1245,28 +1503,22 @@
         }
       }
 
-      // Los coeficientes de Bézout para los valores absolutos
       let xAbsFinal = B === 0 ? 1 : x_arr[i-1];
       let yAbsFinal = B === 0 ? 0 : y_arr[i-1];
 
-      // Ajuste de coeficientes según signos de la entrada original
       let xFinal = xAbsFinal;
       let yFinal = yAbsFinal;
-      
       if (aOrig < 0) xFinal = -xFinal;
       if (bOrig < 0) yFinal = -yFinal;
 
-      // Renderizar resultados en la interfaz
       resA.innerText = aOrig;
       resB.innerText = bOrig;
       resGcd.innerText = gcdResult;
 
-      // Renderizar Tabla Clásica
       tableClassicBody.innerHTML = '';
       classicSteps.forEach((stepObj, index) => {
         const isLastRow = index === classicSteps.length - 1;
         const row = document.createElement('tr');
-        
         row.className = `animate-row transition-all duration-300 ${
           isLastRow 
             ? 'bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-semibold border-y border-emerald-500/30' 
@@ -1291,17 +1543,14 @@
         tableClassicBody.appendChild(row);
       });
 
-      // Renderizar Sección de Euclides Extendido
       bezoutA.innerText = aOrig;
       bezoutB.innerText = bOrig;
       bezoutX.innerText = xFinal;
       bezoutY.innerText = yFinal;
       bezoutGcd.innerText = gcdResult;
-      
       valX.innerText = xFinal;
       valY.innerText = yFinal;
 
-      // Rellenar Tabla Extendida
       tableExtendedBody.innerHTML = '';
       const maxLength = r_arr.length;
       
@@ -1338,10 +1587,8 @@
         tableExtendedBody.appendChild(rowEx);
       }
 
-      // 3. Renderizar Cálculo del Inverso Multiplicativo Modular
       if (gcdResult === 1) {
         cryptoDynamicBox.classList.remove('hidden');
-        
         if (B > 1) {
           let invA = xFinal % B;
           if (invA < 0) invA += B;
@@ -1351,7 +1598,7 @@
             <span class="block mt-1 font-mono text-emerald-400 font-bold bg-slate-900/60 dark:bg-black/30 p-2 rounded-xl border border-white/5 text-center">
               ${aOrig} ⁻¹ ≡ <span class="text-xl text-emerald-300">${invA}</span> (mod ${bOrig})
             </span>
-            <span class="block mt-1 text-[10px] text-slate-400">Verificación: ${aOrig} · ${invA} = ${aOrig * invA} ≡ 1 (mod ${bOrig})</span>
+            <span class="block mt-1 text-[10px] text-slate-400 font-normal">Verificación: ${aOrig} · ${invA} = ${aOrig * invA} ≡ 1 (mod ${bOrig})</span>
           `;
           cryptoInverseResultA.classList.remove('hidden');
         } else {
@@ -1367,13 +1614,12 @@
             <span class="block mt-1 font-mono text-violet-400 font-bold bg-slate-900/60 dark:bg-black/30 p-2 rounded-xl border border-white/5 text-center">
               ${bOrig} ⁻¹ ≡ <span class="text-xl text-violet-300">${invB}</span> (mod ${aOrig})
             </span>
-            <span class="block mt-1 text-[10px] text-slate-400">Verificación: ${bOrig} · ${invB} = ${bOrig * invB} ≡ 1 (mod ${aOrig})</span>
+            <span class="block mt-1 text-[10px] text-slate-400 font-normal">Verificación: ${bOrig} · ${invB} = ${bOrig * invB} ≡ 1 (mod ${aOrig})</span>
           `;
           cryptoInverseResultB.classList.remove('hidden');
         } else {
           cryptoInverseResultB.classList.add('hidden');
         }
-
       } else {
         cryptoDynamicBox.classList.remove('hidden');
         cryptoInverseResultA.innerHTML = `
@@ -1383,33 +1629,400 @@
             </svg>
             Sin Inverso Multiplicativo Modular
           </span>
-          <p class="mt-1.5 text-[11px] leading-relaxed text-slate-300">
-            Dado que <strong>MCD(${aOrig}, ${bOrig}) = ${gcdResult} &gt; 1</strong>, los números no son coprimos (primos relativos). En la aritmética modular, un número tiene inverso multiplicativo si y solo si es coprimo con el módulo. Por tanto, no existe inverso modular en este caso.
+          <p class="mt-1.5 text-[11px] leading-relaxed text-slate-350">
+            Dado que <strong>MCD(${aOrig}, ${bOrig}) = ${gcdResult} &gt; 1</strong>, los números no son coprimos. No existe inverso modular.
           </p>
         `;
         cryptoInverseResultA.classList.remove('hidden');
         cryptoInverseResultB.classList.add('hidden');
       }
 
-      // Reiniciar acordeón por si estaba abierto
       resetAccordion();
-
-      // Mostrar la sección de resultados con transición
       resultsSection.classList.remove('hidden');
       
-      // Desplazar suavemente hasta los resultados
       setTimeout(() => {
         resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
 
-      // Ajustar altura del acordeón
       adjustAccordionHeight();
     }
 
-    // Permitir presionar Enter para calcular
-    document.getElementById('calculator-form').addEventListener('keypress', function(e) {
+
+    // --- CRIPTOGRAFÍA RSA E INTERACTIVOS ---
+    const rsaKeyPreset = document.getElementById('rsa-key-preset');
+    const rsaValPQ = document.getElementById('rsa-val-pq');
+    const rsaValN = document.getElementById('rsa-val-n');
+    const rsaValPhi = document.getElementById('rsa-val-phi');
+    const rsaValE = document.getElementById('rsa-val-e');
+    const rsaValD = document.getElementById('rsa-val-d');
+
+    const rsaInputPhrase = document.getElementById('rsa-input-phrase');
+    const btnRsaEncrypt = document.getElementById('btn-rsa-encrypt');
+    const rsaEncryptionSteps = document.getElementById('rsa-encryption-steps');
+    const rsaDecryptionSteps = document.getElementById('rsa-decryption-steps');
+    const rsaCiphertextOutput = document.getElementById('rsa-ciphertext-output');
+    const rsaPlaintextOutput = document.getElementById('rsa-plaintext-output');
+    const rsaDbgCharSelect = document.getElementById('rsa-dbg-char-select');
+    const rsaDebuggerContainer = document.getElementById('rsa-debugger-container');
+
+    const btnRsaDbgModeEnc = document.getElementById('btn-rsa-dbg-mode-enc');
+    const btnRsaDbgModeDec = document.getElementById('btn-rsa-dbg-mode-dec');
+    const btnRsaDbgRestart = document.getElementById('btn-rsa-dbg-restart');
+    const btnRsaDbgPrev = document.getElementById('btn-rsa-dbg-prev');
+    const btnRsaDbgPlay = document.getElementById('btn-rsa-dbg-play');
+    const btnRsaDbgNext = document.getElementById('btn-rsa-dbg-next');
+    const rsaDbgIconPlay = document.getElementById('rsa-dbg-icon-play');
+    const rsaDbgIconPause = document.getElementById('rsa-dbg-icon-pause');
+    const rsaDbgBtnPlayText = document.getElementById('rsa-dbg-btn-play-text');
+    const rsaDbgSlider = document.getElementById('rsa-dbg-slider');
+    const rsaDbgStepCounter = document.getElementById('rsa-dbg-step-counter');
+
+    const rsaDbgVarBase = document.getElementById('rsa-dbg-var-base');
+    const rsaDbgVarExp = document.getElementById('rsa-dbg-var-exp');
+    const rsaDbgVarMod = document.getElementById('rsa-dbg-var-mod');
+    const rsaDbgVarRes = document.getElementById('rsa-dbg-var-res');
+    const rsaDbgVarIsOdd = document.getElementById('rsa-dbg-var-is-odd');
+    const rsaDbgExplanation = document.getElementById('rsa-dbg-explanation');
+
+    const rsaPresets = {
+      preset1: { p: 11, q: 13, n: 143, phi: 120, e: 23, d: 47 },
+      preset2: { p: 13, q: 17, n: 221, phi: 192, e: 11, d: 35 },
+      preset3: { p: 17, q: 19, n: 323, phi: 288, e: 5, d: 173 }
+    };
+
+    let activeRsaKeys = rsaPresets.preset1;
+    let rsaDebugCharIndex = 0;
+    let rsaDebugMode = 'encrypt'; // 'encrypt' o 'decrypt'
+    let rsaDebugStepIndex = 0;
+    let rsaAutoPlayInterval = null;
+    let cipherTraceData = [];
+
+    // Cambiar presets
+    rsaKeyPreset.addEventListener('change', () => {
+      activeRsaKeys = rsaPresets[rsaKeyPreset.value];
+      rsaValPQ.innerText = `${activeRsaKeys.p}, ${activeRsaKeys.q}`;
+      rsaValN.innerText = activeRsaKeys.n;
+      rsaValPhi.innerText = activeRsaKeys.phi;
+      rsaValE.innerText = activeRsaKeys.e;
+      rsaValD.innerText = activeRsaKeys.d;
+      runRsaCip();
+    });
+
+    // Exponenciación rápida simple
+    function powerMod(base, exp, mod) {
+      let res = 1;
+      base = base % mod;
+      while (exp > 0) {
+        if (exp % 2 === 1) res = (res * base) % mod;
+        base = (base * base) % mod;
+        exp = Math.floor(exp / 2);
+      }
+      return res;
+    }
+
+    // Algoritmo debugger de exponenciación modular
+    function getExpoTrace(baseOrig, expOrig, modOrig) {
+      let trace = [];
+      let base = baseOrig;
+      let exp = expOrig;
+      let mod = modOrig;
+      
+      trace.push({
+        line: 1,
+        vars: { base: baseOrig, exp: expOrig, mod: modOrig, res: 'sin definir', expMod2: '-' },
+        explanation: `Iniciando exponenciación modular para calcular: <strong>${baseOrig}<sup>${expOrig}</sup> mod ${modOrig}</strong>.`
+      });
+      
+      let res = 1;
+      trace.push({
+        line: 2,
+        vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+        explanation: `Inicializamos el resultado acumulado: <strong>res = 1</strong>.`
+      });
+      
+      let baseMod = base % mod;
+      base = baseMod;
+      trace.push({
+        line: 3,
+        vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+        explanation: `Aseguramos que la base sea menor al módulo: base = ${baseOrig} % ${mod} = <strong>${base}</strong>.`
+      });
+      
+      while (exp > 0) {
+        trace.push({
+          line: 4,
+          vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+          explanation: `Evaluando condición: ¿exp (${exp}) &gt; 0? Sí, el ciclo continúa.`
+        });
+        
+        let isOdd = (exp % 2 === 1);
+        let expMod2 = exp % 2;
+        trace.push({
+          line: 5,
+          vars: { base: base, exp: exp, mod: mod, res: res, expMod2: expMod2 },
+          explanation: `Evaluando bit: exp % 2 = ${exp} % 2 = <strong>${expMod2}</strong> (¿exponente impar? <strong>${isOdd ? 'Sí' : 'No'}</strong>).`
+        });
+        
+        if (isOdd) {
+          let prevRes = res;
+          res = (res * base) % mod;
+          trace.push({
+            line: 6,
+            vars: { base: base, exp: exp, mod: mod, res: res, expMod2: expMod2 },
+            explanation: `Como el bit es 1 (impar), multiplicamos: res = (${prevRes} * ${base}) % ${mod} = <strong>${res}</strong>.`
+          });
+        }
+        
+        let prevBase = base;
+        base = (base * base) % mod;
+        trace.push({
+          line: 8,
+          vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+          explanation: `Elevamos la base al cuadrado: base = (${prevBase} * ${prevBase}) % ${mod} = <strong>${base}</strong>.`
+        });
+        
+        let prevExp = exp;
+        exp = Math.floor(exp / 2);
+        trace.push({
+          line: 9,
+          vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+          explanation: `Dividimos el exponente por 2: exp = floor(${prevExp} / 2) = <strong>${exp}</strong>.`
+        });
+      }
+      
+      trace.push({
+        line: 4,
+        vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+        explanation: `Evaluando condición: ¿exp (${exp}) &gt; 0? No (es 0). Terminamos el ciclo while.`
+      });
+      
+      trace.push({
+        line: 11,
+        vars: { base: base, exp: exp, mod: mod, res: res, expMod2: '-' },
+        explanation: `Retornamos el resultado acumulado final: <strong>res = ${res}</strong>.`
+      });
+      
+      return trace;
+    }
+
+    // Ejecutar encriptación/desencriptación de la frase
+    btnRsaEncrypt.addEventListener('click', runRsaCip);
+
+    function runRsaCip() {
+      const phrase = rsaInputPhrase.value;
+      if (!phrase) return;
+
+      const { p, q, n, phi, e, d } = activeRsaKeys;
+
+      rsaEncryptionSteps.innerHTML = '';
+      rsaDecryptionSteps.innerHTML = '';
+      rsaDbgCharSelect.innerHTML = '';
+
+      let ciphertexts = [];
+      let decryptedChars = [];
+      cipherTraceData = [];
+
+      for (let idx = 0; idx < phrase.length; idx++) {
+        const char = phrase[idx];
+        const m = char.charCodeAt(0);
+        
+        // Cifrar
+        const c = powerMod(m, e, n);
+        ciphertexts.push(c);
+        
+        // Descifrar
+        const decM = powerMod(c, d, n);
+        const decChar = String.fromCharCode(decM);
+        decryptedChars.push(decChar);
+
+        // Guardar traza
+        const encTrace = getExpoTrace(m, e, n);
+        const decTrace = getExpoTrace(c, d, n);
+        cipherTraceData.push({
+          charIndex: idx,
+          char: char,
+          encTrace: encTrace,
+          decTrace: decTrace
+        });
+
+        // Rellenar listas visuales
+        const encRow = document.createElement('div');
+        encRow.className = 'py-2 border-b border-slate-200/20 dark:border-slate-800/35 flex justify-between items-center animate-row';
+        encRow.style.animationDelay = `${idx * 50}ms`;
+        encRow.innerHTML = `
+          <span>Carácter <strong class="text-violet-600 dark:text-violet-400">"${char}"</strong> <span class="text-slate-400 text-[10px]">(ASCII ${m})</span></span>
+          <span class="font-semibold">${m}<sup>${e}</sup> mod ${n} = <strong class="text-emerald-500 text-sm">${c}</strong></span>
+        `;
+        rsaEncryptionSteps.appendChild(encRow);
+
+        const decRow = document.createElement('div');
+        decRow.className = 'py-2 border-b border-slate-200/20 dark:border-slate-800/35 flex justify-between items-center animate-row';
+        decRow.style.animationDelay = `${idx * 50}ms`;
+        decRow.innerHTML = `
+          <span>Criptograma <strong class="text-emerald-500">${c}</strong></span>
+          <span class="font-semibold">${c}<sup>${d}</sup> mod ${n} = <strong class="text-violet-600 dark:text-violet-400 text-sm">${decM} ("${decChar}")</strong></span>
+        `;
+        rsaDecryptionSteps.appendChild(decRow);
+
+        const option = document.createElement('option');
+        option.value = idx;
+        option.innerText = `Posición ${idx + 1}: "${char}" (${m} -> ${c})`;
+        rsaDbgCharSelect.appendChild(option);
+      }
+
+      rsaCiphertextOutput.innerText = ciphertexts.join(' ');
+      rsaPlaintextOutput.innerText = decryptedChars.join('');
+
+      rsaDebuggerContainer.classList.remove('hidden');
+      setRsaDbgChar(0);
+    }
+
+    // Configurar Debugger RSA
+    function setRsaDbgChar(idx) {
+      rsaDebugCharIndex = idx;
+      stopRsaAutoPlay();
+      rsaDebugStepIndex = 0;
+      renderRsaDbgStep();
+    }
+
+    rsaDbgCharSelect.addEventListener('change', () => {
+      setRsaDbgChar(parseInt(rsaDbgCharSelect.value, 10));
+    });
+
+    function setRsaDbgMode(mode) {
+      rsaDebugMode = mode;
+      stopRsaAutoPlay();
+      rsaDebugStepIndex = 0;
+      
+      if (mode === 'encrypt') {
+        btnRsaDbgModeEnc.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-300 shadow-sm transition-all";
+        btnRsaDbgModeDec.className = "px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all ml-1";
+      } else {
+        btnRsaDbgModeEnc.className = "px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-all";
+        btnRsaDbgModeDec.className = "px-2.5 py-1 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-300 shadow-sm transition-all ml-1";
+      }
+      
+      renderRsaDbgStep();
+    }
+
+    btnRsaDbgModeEnc.addEventListener('click', () => setRsaDbgMode('encrypt'));
+    btnRsaDbgModeDec.addEventListener('click', () => setRsaDbgMode('decrypt'));
+
+    function renderRsaDbgStep() {
+      if (cipherTraceData.length === 0) return;
+      
+      const charData = cipherTraceData[rsaDebugCharIndex];
+      const trace = rsaDebugMode === 'encrypt' ? charData.encTrace : charData.decTrace;
+      
+      if (rsaDebugStepIndex >= trace.length) rsaDebugStepIndex = trace.length - 1;
+      if (rsaDebugStepIndex < 0) rsaDebugStepIndex = 0;
+
+      const stepData = trace[rsaDebugStepIndex];
+
+      rsaDbgSlider.max = trace.length - 1;
+      rsaDbgSlider.value = rsaDebugStepIndex;
+      rsaDbgStepCounter.innerText = `Paso ${rsaDebugStepIndex + 1} / ${trace.length}`;
+
+      for (let ln = 1; ln <= 12; ln++) {
+        const lineEl = document.getElementById(`expo-line-${ln}`);
+        if (lineEl) {
+          lineEl.classList.remove('bg-violet-500/25', 'border-l-violet-500', 'text-white', 'font-semibold');
+        }
+      }
+      
+      const activeLineEl = document.getElementById(`expo-line-${stepData.line}`);
+      if (activeLineEl) {
+        activeLineEl.classList.add('bg-violet-500/25', 'border-l-violet-500', 'text-white', 'font-semibold');
+        activeLineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      rsaDbgExplanation.innerHTML = stepData.explanation;
+
+      rsaDbgVarBase.innerText = stepData.vars.base;
+      rsaDbgVarExp.innerText = stepData.vars.exp;
+      rsaDbgVarMod.innerText = stepData.vars.mod;
+      rsaDbgVarRes.innerText = stepData.vars.res;
+      rsaDbgVarIsOdd.innerText = stepData.vars.expMod2 === '-' ? '-' : (stepData.vars.expMod2 === 1 ? 'Sí (1)' : 'No (0)');
+
+      [rsaDbgVarBase, rsaDbgVarExp, rsaDbgVarMod, rsaDbgVarRes, rsaDbgVarIsOdd].forEach(el => {
+        el.classList.add('scale-110', 'text-emerald-400');
+        setTimeout(() => el.classList.remove('scale-110', 'text-emerald-400'), 150);
+      });
+    }
+
+    btnRsaDbgNext.addEventListener('click', () => {
+      stopRsaAutoPlay();
+      const charData = cipherTraceData[rsaDebugCharIndex];
+      const trace = rsaDebugMode === 'encrypt' ? charData.encTrace : charData.decTrace;
+      if (rsaDebugStepIndex < trace.length - 1) {
+        rsaDebugStepIndex++;
+        renderRsaDbgStep();
+      }
+    });
+
+    btnRsaDbgPrev.addEventListener('click', () => {
+      stopRsaAutoPlay();
+      if (rsaDebugStepIndex > 0) {
+        rsaDebugStepIndex--;
+        renderRsaDbgStep();
+      }
+    });
+
+    btnRsaDbgRestart.addEventListener('click', () => {
+      stopRsaAutoPlay();
+      rsaDebugStepIndex = 0;
+      renderRsaDbgStep();
+    });
+
+    rsaDbgSlider.addEventListener('input', () => {
+      stopRsaAutoPlay();
+      rsaDebugStepIndex = parseInt(rsaDbgSlider.value, 10);
+      renderRsaDbgStep();
+    });
+
+    btnRsaDbgPlay.addEventListener('click', () => {
+      if (rsaAutoPlayInterval) {
+        stopRsaAutoPlay();
+      } else {
+        startRsaAutoPlay();
+      }
+    });
+
+    function startRsaAutoPlay() {
+      rsaDbgIconPlay.classList.add('hidden');
+      rsaDbgIconPause.classList.remove('hidden');
+      rsaDbgBtnPlayText.innerText = "Pausa";
+      btnRsaDbgPlay.classList.replace('bg-violet-600', 'bg-amber-600');
+      btnRsaDbgPlay.classList.replace('hover:bg-violet-500', 'hover:bg-amber-500');
+
+      rsaAutoPlayInterval = setInterval(() => {
+        const charData = cipherTraceData[rsaDebugCharIndex];
+        const trace = rsaDebugMode === 'encrypt' ? charData.encTrace : charData.decTrace;
+        if (rsaDebugStepIndex < trace.length - 1) {
+          rsaDebugStepIndex++;
+          renderRsaDbgStep();
+        } else {
+          stopRsaAutoPlay();
+        }
+      }, 1500);
+    }
+
+    function stopRsaAutoPlay() {
+      if (rsaAutoPlayInterval) {
+        clearInterval(rsaAutoPlayInterval);
+        rsaAutoPlayInterval = null;
+      }
+      rsaDbgIconPlay.classList.remove('hidden');
+      rsaDbgIconPause.classList.add('hidden');
+      rsaDbgBtnPlayText.innerText = "Auto";
+      btnRsaDbgPlay.classList.replace('bg-amber-600', 'bg-violet-600');
+      btnRsaDbgPlay.classList.replace('hover:bg-amber-500', 'hover:bg-violet-500');
+    }
+
+    // Permitir presionar Enter para cifrar frase
+    rsaInputPhrase.addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        calculateGcd();
+        runRsaCip();
       }
     });
 
